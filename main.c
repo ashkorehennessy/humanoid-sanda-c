@@ -5,7 +5,7 @@ void init(){
     MFSetServoPos(3,512,256);
     MFSetServoPos(4,512,256);
     MFSetServoPos(5,550,256);
-    MFSetServoPos(6,530,256);
+    MFSetServoPos(6,550,256);
     MFSetServoPos(7,512,256);
     MFSetServoPos(8,512,256);
     MFSetServoPos(9,512,256);
@@ -61,43 +61,47 @@ void stop(){
 
 //前倒，重新站起动作1，肘部外伸
 void front_1(){
-    MFSetServoPos(5,790,768);
-    MFSetServoPos(9,260,768);
+    MFSetServoPos(5,910,768);
+    MFSetServoPos(9,90,768);
+    MFSetServoPos(6,570,768);
+    MFSetServoPos(10,512,768);
     MFServoAction();
 }
 
 //后倒，重新站起动作1，肘部外伸
 void back_1(){
-    MFSetServoPos(5,800,768);
-    MFSetServoPos(9,260,768);
+    MFSetServoPos(5,910,768);
+    MFSetServoPos(9,90,768);
+    MFSetServoPos(6,570,768);
+    MFSetServoPos(10,512,768);
     MFServoAction();
 }
 
 //前倒，重新站起动作2，肩部后顶
 void front_2(){
-    MFSetServoPos(4,170,768);
-    MFSetServoPos(8,180,768);
+    MFSetServoPos(4,130,768);
+    MFSetServoPos(8,150,768);
     MFServoAction();
 }
 
 //后倒，重新站起动作2，肩部后顶
 void back_2(){
-    MFSetServoPos(4,860,768);
+    MFSetServoPos(4,890,768);
     MFSetServoPos(8,885,768);
     MFServoAction();
 }
 
 //前倒，站起动作3手部向下顶
 void front_3(){
-    MFSetServoPos(6,190,768);
-    MFSetServoPos(10,840,768);
+    MFSetServoPos(6,130,768);
+    MFSetServoPos(10,900,768);
     MFServoAction();
 }
 
 //后倒，站起动作3手部向下顶
 void back_3(){
-    MFSetServoPos(6,190,768);
-    MFSetServoPos(10,860,768);
+    MFSetServoPos(6,110,768);
+    MFSetServoPos(10,920,768);
     MFServoAction();
 }
 
@@ -125,7 +129,7 @@ void front_5(){
     MFSetServoPos(10,512,768);
     MFSetServoPos(3,750,512);
     MFSetServoPos(7,750,512);
-    MFSetServoPos(4,210,180);
+    MFSetServoPos(4,230,180);
     MFSetServoPos(8,240,180);
     MFServoAction();
 }
@@ -136,8 +140,8 @@ void back_5(){
     MFSetServoPos(10,512,768);
     MFSetServoPos(3,250,512);
     MFSetServoPos(7,270,512);
-    MFSetServoPos(4,750,180);
-    MFSetServoPos(8,780,180);
+    MFSetServoPos(4,800,180);
+    MFSetServoPos(8,810,180);
     MFServoAction();
 }
 
@@ -185,9 +189,9 @@ void front_stand(){
     front_3();
     DelayMS(1000);
     front_4();
-    DelayMS(800);
+    DelayMS(1000);
     front_5();
-    DelayMS(800);
+    DelayMS(1000);
     front_6();
     DelayMS(1000);
 }
@@ -202,11 +206,71 @@ void back_stand(){
     back_3();
     DelayMS(1000);
     back_4();
-    DelayMS(800);
+    DelayMS(1000);
     back_5();
-    DelayMS(800);
+    DelayMS(1000);
     back_6();
     DelayMS(1000);
+}
+
+// 打击动作1，手抬起
+void hit_1(){
+    MFSetServoPos(4,170,512);
+    MFSetServoPos(5,550,256);
+    MFSetServoPos(6,530,256);
+    MFSetServoPos(8,180,512);
+    MFSetServoPos(9,512,256);
+    MFSetServoPos(10,512,256);
+    MFServoAction();
+}
+
+//打击动作2，前方散开攻击
+void hit_2(){
+    MFSetServoPos(4,160,512);
+    MFSetServoPos(8,250,512);
+    MFSetServoPos(5,420,256);
+    MFSetServoPos(6,370,256);
+    MFSetServoPos(9,640,256);
+    MFSetServoPos(10,680,256);
+    MFServoAction();
+    DelayMS(1000);
+    MFSetServoPos(5,680,768);
+    MFSetServoPos(6,630,768);
+    MFSetServoPos(9,380,768);
+    MFSetServoPos(10,420,768);
+    MFServoAction();
+    DelayMS(800);
+}
+
+//打击动作3，雨刮式攻击
+void hit_3(){
+    MFSetServoPos(4,170,512);
+    MFSetServoPos(8,180,512);
+    MFSetServoPos(5,420,512);
+    MFSetServoPos(6,370,512);
+    MFSetServoPos(9,380,512);
+    MFSetServoPos(10,420,512);
+    MFServoAction();
+    DelayMS(1000);
+    MFSetServoPos(5,680,512);
+    MFSetServoPos(6,630,512);
+    MFSetServoPos(9,640,512);
+    MFSetServoPos(10,680,512);
+    MFServoAction();
+    DelayMS(1000);
+}
+
+void hit_4(){
+	MFSetServoPos(8,885,768);
+	MFSetServoPos(4,170,768);
+	MFSetServoPos(5,680,512);
+    MFSetServoPos(6,630,512);
+    MFSetServoPos(9,640,512);
+    MFSetServoPos(10,680,512);
+    MFSetServoRotaSpd(1,-600);
+    MFSetServoRotaSpd(2,-620);
+    MFServoAction();
+    DelayMS(1500);
 }
 
 //和蔼
@@ -286,6 +350,17 @@ void autopilot(int L1, int L2, int R1, int R2) {
     }
 }
 
+//刷新传感器信号缓冲
+void flush_sensor(){
+    int i;
+    for(i=0;i<2;i+=1){
+        MFGetAD(i);
+    }
+    for(i=0;i<4;i+=1){
+        MFGetDigiInput(i);
+    }
+}
+
 int main()
 {
     //检测到物体返回0，检测不到返回1
@@ -295,6 +370,9 @@ int main()
     int R2; // 右后
 
     int angle; // 倾角
+    int distance; // 距离
+
+    int attacking = 0; // 正在攻击
 
     MFInit();
     MFInitServoMapping(&SERVO_MAPPING[0],10);
@@ -325,16 +403,29 @@ int main()
         R1 = MFGetDigiInput(2);
         R2 = MFGetDigiInput(3);
         angle = MFGetAD(0);
-
+        distance = MFGetAD(1);
         if (angle > 700){
             stop();
             front_stand();
+            flush_sensor();
             continue;
         }
         if (angle < 170){
             stop();
             back_stand();
+            flush_sensor();
             continue;
+        }
+        if (distance > 150){
+            stop();
+            if (attacking == 0){
+                hit_1();
+                DelayMS(500);
+                attacking = 1;
+            }
+            hit_2();
+        } else {
+            attacking = 0;
         }
         autopilot(L1, L2, R1, R2);
     }
