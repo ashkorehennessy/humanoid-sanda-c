@@ -29,7 +29,7 @@ void boost(){
 }
 
 //后退
-void back(){
+void go_back(){
     MFSetServoRotaSpd(1,450);
     MFSetServoRotaSpd(2,-470);
     MFServoAction();
@@ -306,7 +306,7 @@ void autopilot(int L1, int L2, int R1, int R2) {
             forward();
             break;
         case 1: // 左前悬空，后退，右转*2
-            back();
+            go_back();
             turn_right();
             turn_right();
             forward();
@@ -321,13 +321,13 @@ void autopilot(int L1, int L2, int R1, int R2) {
             forward();
             break;
         case 4: // 右前悬空，后退，左转*2，前进
-            back();
+            go_back();
             turn_left();
             turn_left();
             forward();
             break;
         case 5: // 前方悬空，后退，左转*4，前进
-            back();
+            go_back();
             turn_left();
             turn_left();
             turn_left();
@@ -364,19 +364,23 @@ void flush_sensor(){
 int main()
 {
     //检测到物体返回0，检测不到返回1
-    int L1; // 左前
-    int L2; // 左后
-    int R1; // 右前
-    int R2; // 右后
+    int edge_L1; // 左前边缘检测
+    int edge_L2; // 左后边缘检测
+    int edge_R1; // 右前边缘检测
+    int edge_R2; // 右后边缘检测
+    int enemy_B1; // 左后方敌人检测
+    int enemy_B2; // 右后方敌人检测
+    int enemy_F1; // 左前方敌人检测
+    int enemy_F2; // 右前方敌人检测
 
-    int angle; // 倾角
-    int distance; // 距离
+    // AD传感器输入
+    int angle; // 倾角数值
+    int distance; // 距离数值，距离越近数值越大
 
     int attacking = 0; // 正在攻击
-
     MFInit();
     MFInitServoMapping(&SERVO_MAPPING[0],10);
-    MFSetPortDirect(0x00000FF0);
+    MFSetPortDirect(0x00000F00);
     MFSetServoMode(1,1);
     MFSetServoMode(2,1);
     MFSetServoMode(3,0);
@@ -398,10 +402,18 @@ int main()
     DelayMS(1400);
 
     for(;;){
-        L1 = MFGetDigiInput(0);
-        L2 = MFGetDigiInput(1);
-        R1 = MFGetDigiInput(2);
-        R2 = MFGetDigiInput(3);
+        
+        // 获取IO输入
+        edge_L1 = MFGetDigiInput(0);
+        edge_L2 = MFGetDigiInput(1);
+        edge_R1 = MFGetDigiInput(2);
+        edge_R2 = MFGetDigiInput(3);
+        enemy_B1 = MFGetDigiInput(4);   // 检测左后方敌人
+        enemy_B2 = MFGetDigiInput(5);   // 检测右后方敌人
+        enemy_F1 = MFGetDigiInput(6);   // 检测左前方敌人
+        enemy_F2 = MFGetDigiInput(7);   // 检测右前方敌人
+
+        // 获取AD输入
         angle = MFGetAD(0);
         distance = MFGetAD(1);
         if (angle > 700){
@@ -424,10 +436,12 @@ int main()
                 attacking = 1;
             }
             hit_2();
-        } else {
+        } else { // 检测不到敌人
             attacking = 0;
+            init();
         }
-        autopilot(L1, L2, R1, R2);
+
+        autopilot(edge_L1, edge_L2, edge_R1, edge_R2);
     }
     return 0;
 }
