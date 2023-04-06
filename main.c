@@ -22,8 +22,8 @@ void forward(){
 }
 
 void boost(){
-    MFSetServoRotaSpd(1,-580);
-    MFSetServoRotaSpd(2,630);
+    MFSetServoRotaSpd(1,-520);
+    MFSetServoRotaSpd(2,540);
     MFServoAction();
     DelayMS(400);
 }
@@ -218,7 +218,7 @@ void hit_1(){
     MFSetServoPos(4,170,512);
     MFSetServoPos(5,550,256);
     MFSetServoPos(6,530,256);
-    MFSetServoPos(8,180,512);
+    MFSetServoPos(8,885,512);
     MFSetServoPos(9,512,256);
     MFSetServoPos(10,512,256);
     MFServoAction();
@@ -228,18 +228,17 @@ void hit_1(){
 void hit_2(){
     MFSetServoPos(4,160,512);
     MFSetServoPos(8,250,512);
-    MFSetServoPos(5,420,256);
-    MFSetServoPos(6,370,256);
-    MFSetServoPos(9,640,256);
-    MFSetServoPos(10,680,256);
-    MFServoAction();
-    DelayMS(1000);
-    MFSetServoPos(5,680,768);
-    MFSetServoPos(6,630,768);
-    MFSetServoPos(9,380,768);
-    MFSetServoPos(10,420,768);
-    MFServoAction();
-    DelayMS(800);
+    MFSetServoPos(5,320,256);
+    MFSetServoPos(6,270,256);
+    MFSetServoPos(9,740,256);
+    MFSetServoPos(10,780,256);
+    //forward();
+    DelayMS(600);
+    MFSetServoPos(5,630,768);
+    MFSetServoPos(6,580,768);
+    MFSetServoPos(9,430,768);
+    MFSetServoPos(10,470,768);
+    //go_back();
 }
 
 //打击动作3，雨刮式攻击
@@ -304,27 +303,32 @@ void autopilot(int L1, int L2, int R1, int R2) {
     switch (index) {
         case 0: // 无悬空，前进
             forward();
+            flush_sensor();
             break;
         case 1: // 左前悬空，后退，右转*2
             go_back();
             turn_right();
             turn_right();
             forward();
+            flush_sensor();
             break;
         case 2: // 左后悬空，右转，前进
             turn_right();
             forward();
+            flush_sensor();
             break;
         case 3: // 左侧悬空，右转*2，前进
             turn_right();
             turn_right();
             forward();
+            flush_sensor();
             break;
         case 4: // 右前悬空，后退，左转*2，前进
             go_back();
             turn_left();
             turn_left();
             forward();
+            flush_sensor();
             break;
         case 5: // 前方悬空，后退，左转*4，前进
             go_back();
@@ -332,32 +336,39 @@ void autopilot(int L1, int L2, int R1, int R2) {
             turn_left();
             turn_left();
             forward();
+            flush_sensor();
             break;
         case 8: // 右后悬空，左转，前进
             turn_left();
             forward();
+            flush_sensor();
             break;
         case 10: // 后方悬空，加速*2，前进
             boost();
             boost();
             forward();
+            flush_sensor();
             break;
         case 12: // 右侧悬空，左转*2，前进
             turn_left();
             turn_left();
             forward();
+            flush_sensor();
             break;
     }
 }
 
 //刷新传感器信号缓冲
 void flush_sensor(){
-    int i;
-    for(i=0;i<2;i+=1){
-        MFGetAD(i);
-    }
-    for(i=0;i<4;i+=1){
-        MFGetDigiInput(i);
+    int i,j;
+    for(j=0;j<10;j+=1){
+
+        for(i=0;i<2;i+=1){
+            MFGetAD(i);
+        }
+        for(i=0;i<4;i+=1){
+            MFGetDigiInput(i);
+        }
     }
 }
 
@@ -399,7 +410,7 @@ int main()
     init();
     DelayMS(2000);
     boost();
-    DelayMS(1400);
+    DelayMS(1000);
 
     for(;;){
         
@@ -416,31 +427,60 @@ int main()
         // 获取AD输入
         angle = MFGetAD(0);
         distance = MFGetAD(1);
+
+        // 前倒站起
         if (angle > 700){
             stop();
             front_stand();
             flush_sensor();
             continue;
         }
+        // 后倒站起
         if (angle < 170){
             stop();
             back_stand();
             flush_sensor();
             continue;
         }
-        if (distance > 150){
+        // 检测到敌人
+        if (distance > 100){
             stop();
             if (attacking == 0){
                 hit_1();
                 DelayMS(500);
                 attacking = 1;
             }
-            hit_2();
+            hit_4();
         } else { // 检测不到敌人
             attacking = 0;
             init();
         }
+        
+        // 后方检测到敌人，仅转向
+        if (enemy_B1 == 0 || enemy_B2 == 0) {
+            if (attacking == 0){
+                turn_right();
+                DelayMS(300); //转太快容易倒
+                turn_right();
+            }
+            continue;
+        }
 
+        // 左前方检测到敌人
+        if (enemy_F1 == 0) {
+            if (attacking == 0) {
+                turn_left();
+            }
+            continue;
+        }
+        // 右前方检测到敌人
+        if (enemy_F2 == 0) {
+            if (attacking == 0) {
+                turn_right();
+            }
+            continue;
+        }
+        // 自动巡航
         autopilot(edge_L1, edge_L2, edge_R1, edge_R2);
     }
     return 0;
