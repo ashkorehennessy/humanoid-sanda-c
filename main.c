@@ -376,14 +376,11 @@ void autopilot(int L1, int L2, int R1, int R2) {
 //刷新传感器信号缓冲
 void flush_sensor(){
     int i,j;
-    for(j=0;j<10;j+=1){
-
-        for(i=0;i<2;i+=1){
-            MFGetAD(i);
-        }
-        for(i=0;i<4;i+=1){
-            MFGetDigiInput(i);
-        }
+    for(i=0;i<2;i+=1){
+        j = MFGetAD(i);
+    }
+    for(i=0;i<8;i+=1){
+        j = MFGetDigiInput(i);
     }
 }
 
@@ -450,7 +447,6 @@ int main()
             front_stand();
             autopilot(0,0,0,0);
             continue;
-            //flush_sensor();
         }
         // 后倒站起
         if (angle < 170){
@@ -458,7 +454,6 @@ int main()
             back_stand();
             autopilot(0,0,0,0);
             continue;
-            //flush_sensor();
         }
         // 检测到敌人
         if (distance > 100){
