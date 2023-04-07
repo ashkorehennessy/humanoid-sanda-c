@@ -1,5 +1,6 @@
 #include  "Apps/SystemTask.h"
 uint8 SERVO_MAPPING[10] = {1,2,3,4,5,6,7,8,9,10};
+uint8 auto_pilot_index = 0;
 //机器人动作初始化
 void init(){
     MFSetServoPos(3,512,256);
@@ -79,19 +80,19 @@ void back_1(){
 
 //前倒，重新站起动作2，肩部后顶
 void front_2(){
-    MFSetServoPos(4,130,768);
-    MFSetServoPos(8,150,768);
+    MFSetServoPos(4,140,768);
+    MFSetServoPos(8,170,768);
     MFServoAction();
 }
 
 //后倒，重新站起动作2，肩部后顶
 void back_2(){
-    MFSetServoPos(4,890,768);
-    MFSetServoPos(8,885,768);
+    MFSetServoPos(4,880,768);
+    MFSetServoPos(8,870,768);
     MFServoAction();
 }
 
-//前倒，站起动作3手部向下顶
+//前倒，站起动作3手部向下顶，腿部内弯，肩部往外一点
 void front_3(){
     MFSetServoPos(6,130,768);
     MFSetServoPos(10,900,768);
@@ -100,57 +101,43 @@ void front_3(){
 
 //后倒，站起动作3手部向下顶
 void back_3(){
-    MFSetServoPos(6,110,768);
-    MFSetServoPos(10,920,768);
+    MFSetServoPos(6,130,768);
+    MFSetServoPos(10,900,768);
     MFServoAction();
 }
 
-//前倒，重新站起动作4，手部伸直，肘部伸直
+//前倒，重新站起动作4，手部伸直，肘部伸直，腿部伸直
 void front_4(){
-    MFSetServoPos(6,490,768);
-    MFSetServoPos(10,532,768);
-    MFSetServoPos(5,520,768);
-    MFSetServoPos(9,512,768);
+    MFSetServoPos(5,700,768);
+    MFSetServoPos(6,342,768);
+    MFSetServoPos(9,346,768);
+    MFSetServoPos(10,710,768);
+    MFSetServoPos(3,803,512);
+    MFSetServoPos(7,810,512);
     MFServoAction();
 }
 
 //后倒，重新站起动作4，手部伸直，肘部伸直
 void back_4(){
-    MFSetServoPos(6,490,768);
-    MFSetServoPos(10,532,768);
-    MFSetServoPos(5,550,768);
-    MFSetServoPos(9,512,768);
+    MFSetServoPos(5,700,768);
+    MFSetServoPos(6,342,768);
+    MFSetServoPos(9,346,768);
+    MFSetServoPos(10,710,768);
+    MFSetServoPos(3,221,512);
+    MFSetServoPos(7,214,512);
     MFServoAction();
 }
 
 //前倒，重新站起动作5，手部往外一点，肩部往下一点，腿部后弯
 void front_5(){
+    MFSetServoPos(5,550,768);
+    MFSetServoPos(9,512,768);
     MFSetServoPos(6,520,768);
     MFSetServoPos(10,512,768);
-    MFSetServoPos(3,750,512);
-    MFSetServoPos(7,750,512);
-    MFSetServoPos(4,230,180);
-    MFSetServoPos(8,240,180);
-    MFServoAction();
-}
-
-//后倒，重新站起动作5，手部往外一点，肩部往下一点，腿部后弯
-void back_5(){
-    MFSetServoPos(6,520,768);
-    MFSetServoPos(10,512,768);
-    MFSetServoPos(3,250,512);
-    MFSetServoPos(7,270,512);
-    MFSetServoPos(4,800,180);
-    MFSetServoPos(8,810,180);
-    MFServoAction();
-}
-
-//前倒，重新站起动作6，腿部伸直，肩部伸直，移动轮子平衡重心
-void front_6(){
+    MFSetServoPos(4,512,768);
+    MFSetServoPos(8,512,768);
     MFSetServoPos(3,512,300);
     MFSetServoPos(7,512,300);
-    MFSetServoPos(4,512,180);
-    MFSetServoPos(8,512,180);
     MFSetServoRotaSpd(1,-700);
     MFSetServoRotaSpd(2,740);
     MFServoAction();
@@ -160,14 +147,19 @@ void front_6(){
     MFServoAction();
     DelayMS(750);
     stop();
+    MFServoAction();
 }
 
-//后倒，重新站起动作6，腿部伸直，肩部伸直，移动轮子平衡重心
-void back_6(){
+//后倒，重新站起动作5，腿部伸直，肩部伸直，移动轮子平衡重心
+void back_5(){
+    MFSetServoPos(5,550,768);
+    MFSetServoPos(9,512,768);
+    MFSetServoPos(6,520,768);
+    MFSetServoPos(10,512,768);
+    MFSetServoPos(4,512,768);
+    MFSetServoPos(8,512,768);
     MFSetServoPos(3,512,300);
     MFSetServoPos(7,512,300);
-    MFSetServoPos(4,512,180);
-    MFSetServoPos(8,512,180);
     MFSetServoRotaSpd(1,740);
     MFSetServoRotaSpd(2,-700);
     MFServoAction();
@@ -181,7 +173,6 @@ void back_6(){
 
 //前倒站起
 void front_stand(){
-    DelayMS(1000);
     front_1();
     DelayMS(600);
     front_2();
@@ -189,16 +180,13 @@ void front_stand(){
     front_3();
     DelayMS(1000);
     front_4();
-    DelayMS(1000);
+    DelayMS(1400);
     front_5();
-    DelayMS(1000);
-    front_6();
     DelayMS(1000);
 }
 
 // 后倒站起
 void back_stand(){
-    DelayMS(1000);
     back_1();
     DelayMS(600);
     back_2();
@@ -206,10 +194,8 @@ void back_stand(){
     back_3();
     DelayMS(1000);
     back_4();
-    DelayMS(1000);
+    DelayMS(1400);
     back_5();
-    DelayMS(1000);
-    back_6();
     DelayMS(1000);
 }
 
@@ -287,48 +273,43 @@ void szyf(){
 
 //自动巡航
 void autopilot(int L1, int L2, int R1, int R2) {
-    int index=0;
+    auto_pilot_index = 0;
     if(L1 == 1) {
-        index += 1;
+        auto_pilot_index += 1;
     }
     if(L2 == 1) {
-        index += 2;
+        auto_pilot_index += 2;
     }
     if(R1 == 1) {
-        index += 4;
+        auto_pilot_index += 4;
     }
     if(R2 == 1) {
-        index += 8;
+        auto_pilot_index += 8;
     }
-    switch (index) {
+    switch (auto_pilot_index) {
         case 0: // 无悬空，前进
             forward();
-            flush_sensor();
             break;
         case 1: // 左前悬空，后退，右转*2
             go_back();
             turn_right();
             turn_right();
             forward();
-            flush_sensor();
             break;
         case 2: // 左后悬空，右转，前进
             turn_right();
             forward();
-            flush_sensor();
             break;
         case 3: // 左侧悬空，右转*2，前进
             turn_right();
             turn_right();
             forward();
-            flush_sensor();
             break;
         case 4: // 右前悬空，后退，左转*2，前进
             go_back();
             turn_left();
             turn_left();
             forward();
-            flush_sensor();
             break;
         case 5: // 前方悬空，后退，左转*4，前进
             go_back();
@@ -336,25 +317,22 @@ void autopilot(int L1, int L2, int R1, int R2) {
             turn_left();
             turn_left();
             forward();
-            flush_sensor();
             break;
         case 8: // 右后悬空，左转，前进
             turn_left();
             forward();
-            flush_sensor();
             break;
         case 10: // 后方悬空，加速*2，前进
             boost();
             boost();
             forward();
-            flush_sensor();
             break;
         case 12: // 右侧悬空，左转*2，前进
             turn_left();
             turn_left();
             forward();
-            flush_sensor();
             break;
+        default:break;
     }
 }
 
