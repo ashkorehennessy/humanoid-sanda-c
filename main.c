@@ -173,6 +173,8 @@ void back_5(){
 
 //前倒站起
 void front_stand(){
+    init();
+    DelayMS(500);
     front_1();
     DelayMS(600);
     front_2();
@@ -187,6 +189,8 @@ void front_stand(){
 
 // 后倒站起
 void back_stand(){
+    init();
+    DelayMS(500);
     back_1();
     DelayMS(600);
     back_2();
@@ -256,6 +260,39 @@ void hit_4(){
     MFSetServoRotaSpd(2,-620);
     MFServoAction();
     DelayMS(1500);
+}
+
+// 前推攻击
+void hit_5(){
+    // 收回
+    MFSetServoPos(4,201,600);
+    MFSetServoPos(5,881,600);
+    MFSetServoPos(6,113,600);
+    MFSetServoPos(8,201,600);
+    MFSetServoPos(9,165,600);
+    MFSetServoPos(10,921,600);
+    MFServoAction();
+    DelayMS(1000);
+    // 攻击
+    MFSetServoPos(4,201,900);
+    MFSetServoPos(5,436,900);
+    MFSetServoPos(6,445,900);
+    MFSetServoPos(8,201,900);
+    MFSetServoPos(9,601,900);
+    MFSetServoPos(10,573,900);
+    MFServoAction();
+    DelayMS(500);
+}
+
+// 预攻击姿势
+void alert(){
+    MFSetServoPos(4,201,300);
+    MFSetServoPos(5,881,300);
+    MFSetServoPos(6,113,300);
+    MFSetServoPos(8,201,300);
+    MFSetServoPos(9,165,300);
+    MFSetServoPos(10,921,300);
+    MFServoAction();
 }
 
 //和蔼
@@ -389,6 +426,7 @@ int main()
     DelayMS(2000);
     boost();
     DelayMS(1000);
+    alert();
 
     for(;;){
         
@@ -410,28 +448,28 @@ int main()
         if (angle > 700){
             stop();
             front_stand();
-            flush_sensor();
+            autopilot(0,0,0,0);
             continue;
+            //flush_sensor();
         }
         // 后倒站起
         if (angle < 170){
             stop();
             back_stand();
-            flush_sensor();
+            autopilot(0,0,0,0);
             continue;
+            //flush_sensor();
         }
         // 检测到敌人
         if (distance > 100){
             stop();
             if (attacking == 0){
-                hit_1();
-                DelayMS(500);
                 attacking = 1;
             }
-            hit_4();
+            hit_5();
         } else { // 检测不到敌人
             attacking = 0;
-            init();
+            alert();
         }
         
         // 后方检测到敌人，仅转向
@@ -441,6 +479,7 @@ int main()
                 DelayMS(300); //转太快容易倒
                 turn_right();
             }
+            autopilot(0,0,0,0);
             continue;
         }
 
@@ -449,6 +488,7 @@ int main()
             if (attacking == 0) {
                 turn_left();
             }
+            autopilot(0,0,0,0);
             continue;
         }
         // 右前方检测到敌人
@@ -456,6 +496,7 @@ int main()
             if (attacking == 0) {
                 turn_right();
             }
+            autopilot(0,0,0,0);
             continue;
         }
         // 自动巡航
