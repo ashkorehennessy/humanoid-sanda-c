@@ -3,159 +3,160 @@ uint8 SERVO_MAPPING[10] = {1,2,3,4,5,6,7,8,9,10};
 uint8 auto_pilot_index = 0;
 #define FORWARD 0,0,0,0
 #define STOP 1,1,1,1
+enum servoID{RWHEEL = 1, LWHEEL, LFOOT, LSHOULDER, LELBOW, LHAND, RFOOT, RSHOULDER, RELBOW, RHAND};
 //机器人动作初始化
 void init(){
-    MFSetServoPos(3,512,512);
-    MFSetServoPos(5,550,512);
-    MFSetServoPos(6,550,512);
-    MFSetServoPos(7,512,512);
-    MFSetServoPos(9,512,512);
-    MFSetServoPos(10,512,512);
+    MFSetServoPos(LFOOT,512,512);
+    MFSetServoPos(LELBOW,550,512);
+    MFSetServoPos(LHAND,550,512);
+    MFSetServoPos(RFOOT,512,512);
+    MFSetServoPos(RELBOW,512,512);
+    MFSetServoPos(RHAND,512,512);
     MFServoAction();
     DelayMS(600);
-    MFSetServoPos(4,512,256);
-    MFSetServoPos(8,512,256);
+    MFSetServoPos(LSHOULDER,512,256);
+    MFSetServoPos(RSHOULDER,512,256);
     MFServoAction();
 }
 
 //前进
 void forward(){
-    MFSetServoRotaSpd(1,-310);
-    MFSetServoRotaSpd(2,330);
+    MFSetServoRotaSpd(RWHEEL,-310);
+    MFSetServoRotaSpd(LWHEEL,330);
     MFServoAction();
     DelayMS(300);
 }
 
 //加速
 void boost(){
-    MFSetServoRotaSpd(1,-520);
-    MFSetServoRotaSpd(2,560);
+    MFSetServoRotaSpd(RWHEEL,-520);
+    MFSetServoRotaSpd(LWHEEL,560);
     MFServoAction();
     DelayMS(300);
 }
 //加速后退
 void boost_back(){
-    MFSetServoRotaSpd(1,620);
-    MFSetServoRotaSpd(2,-660);
+    MFSetServoRotaSpd(RWHEEL,620);
+    MFSetServoRotaSpd(LWHEEL,-660);
     MFServoAction();
     DelayMS(300);
 }
 
 //后退
 void go_back(){
-    MFSetServoRotaSpd(1,450);
-    MFSetServoRotaSpd(2,-470);
+    MFSetServoRotaSpd(RWHEEL,450);
+    MFSetServoRotaSpd(LWHEEL,-470);
     MFServoAction();
     DelayMS(400);
 }
 
 //左转
 void turn_left(){
-    MFSetServoRotaSpd(1,-450);
-    MFSetServoRotaSpd(2,-470);
+    MFSetServoRotaSpd(RWHEEL,-450);
+    MFSetServoRotaSpd(LWHEEL,-470);
     MFServoAction();
     DelayMS(400);
 }
 
 //右转
 void turn_right(){
-    MFSetServoRotaSpd(1,450);
-    MFSetServoRotaSpd(2,470);
+    MFSetServoRotaSpd(RWHEEL,450);
+    MFSetServoRotaSpd(LWHEEL,470);
     MFServoAction();
     DelayMS(400);
 }
 
 //停止
 void stop(){
-    MFSetServoRotaSpd(1,0);
-    MFSetServoRotaSpd(2,0);
+    MFSetServoRotaSpd(RWHEEL,0);
+    MFSetServoRotaSpd(LWHEEL,0);
     MFServoAction();
 }
 
 //前倒，重新站起动作1，肘部外伸
 void front_1(){
-    MFSetServoPos(5,910,768);
-    MFSetServoPos(9,90,768);
-    MFSetServoPos(6,570,768);
-    MFSetServoPos(10,512,768);
+    MFSetServoPos(LELBOW,910,768);
+    MFSetServoPos(RELBOW,90,768);
+    MFSetServoPos(LHAND,570,768);
+    MFSetServoPos(RHAND,512,768);
     MFServoAction();
 }
 
 //后倒，重新站起动作1，肘部外伸
 void back_1(){
-    MFSetServoPos(5,910,768);
-    MFSetServoPos(9,90,768);
-    MFSetServoPos(6,570,768);
-    MFSetServoPos(10,512,768);
+    MFSetServoPos(LELBOW,910,768);
+    MFSetServoPos(RELBOW,90,768);
+    MFSetServoPos(LHAND,570,768);
+    MFSetServoPos(RHAND,512,768);
     MFServoAction();
 }
 
 //前倒，重新站起动作2，肩部后顶
 void front_2(){
-    MFSetServoPos(4,140,768);
-    MFSetServoPos(8,170,768);
+    MFSetServoPos(LSHOULDER,140,768);
+    MFSetServoPos(RSHOULDER,170,768);
     MFServoAction();
 }
 
 //后倒，重新站起动作2，肩部后顶
 void back_2(){
-    MFSetServoPos(4,880,768);
-    MFSetServoPos(8,870,768);
+    MFSetServoPos(LSHOULDER,880,768);
+    MFSetServoPos(RSHOULDER,870,768);
     MFServoAction();
 }
 
 //前倒，站起动作3手部向下顶，腿部内弯，肩部往外一点
 void front_3(){
-    MFSetServoPos(6,130,768);
-    MFSetServoPos(10,900,768);
+    MFSetServoPos(LHAND,130,768);
+    MFSetServoPos(RHAND,900,768);
     MFServoAction();
 }
 
 //后倒，站起动作3手部向下顶
 void back_3(){
-    MFSetServoPos(6,130,768);
-    MFSetServoPos(10,900,768);
+    MFSetServoPos(LHAND,130,768);
+    MFSetServoPos(RHAND,900,768);
     MFServoAction();
 }
 
 //前倒，重新站起动作4，手部伸直，肘部伸直，腿部伸直
 void front_4(){
-    MFSetServoPos(5,700,768);
-    MFSetServoPos(6,342,768);
-    MFSetServoPos(9,346,768);
-    MFSetServoPos(10,710,768);
-    MFSetServoPos(3,803,512);
-    MFSetServoPos(7,810,512);
+    MFSetServoPos(LELBOW,700,768);
+    MFSetServoPos(LHAND,342,768);
+    MFSetServoPos(RELBOW,346,768);
+    MFSetServoPos(RHAND,710,768);
+    MFSetServoPos(LFOOT,803,512);
+    MFSetServoPos(RFOOT,810,512);
     MFServoAction();
 }
 
 //后倒，重新站起动作4，手部伸直，肘部伸直
 void back_4(){
-    MFSetServoPos(5,700,768);
-    MFSetServoPos(6,342,768);
-    MFSetServoPos(9,346,768);
-    MFSetServoPos(10,710,768);
-    MFSetServoPos(3,221,512);
-    MFSetServoPos(7,214,512);
+    MFSetServoPos(LELBOW,700,768);
+    MFSetServoPos(LHAND,342,768);
+    MFSetServoPos(RELBOW,346,768);
+    MFSetServoPos(RHAND,710,768);
+    MFSetServoPos(LFOOT,221,512);
+    MFSetServoPos(RFOOT,214,512);
     MFServoAction();
 }
 
 //前倒，重新站起动作5，手部往外一点，肩部往下一点，腿部后弯
 void front_5(){
-    MFSetServoPos(5,550,768);
-    MFSetServoPos(9,512,768);
-    MFSetServoPos(6,520,768);
-    MFSetServoPos(10,512,768);
-    MFSetServoPos(4,512,768);
-    MFSetServoPos(8,512,768);
-    MFSetServoPos(3,512,300);
-    MFSetServoPos(7,512,300);
-    MFSetServoRotaSpd(1,-700);
-    MFSetServoRotaSpd(2,740);
+    MFSetServoPos(LELBOW,550,768);
+    MFSetServoPos(RELBOW,512,768);
+    MFSetServoPos(LHAND,520,768);
+    MFSetServoPos(RHAND,512,768);
+    MFSetServoPos(LSHOULDER,512,768);
+    MFSetServoPos(RSHOULDER,512,768);
+    MFSetServoPos(LFOOT,512,300);
+    MFSetServoPos(RFOOT,512,300);
+    MFSetServoRotaSpd(RWHEEL,-700);
+    MFSetServoRotaSpd(LWHEEL,740);
     MFServoAction();
     DelayMS(200);
-    MFSetServoRotaSpd(1,-310);
-    MFSetServoRotaSpd(2,330);
+    MFSetServoRotaSpd(RWHEEL,-310);
+    MFSetServoRotaSpd(LWHEEL,330);
     MFServoAction();
     DelayMS(750);
     stop();
@@ -164,20 +165,20 @@ void front_5(){
 
 //后倒，重新站起动作5，腿部伸直，肩部伸直，移动轮子平衡重心
 void back_5(){
-    MFSetServoPos(5,550,768);
-    MFSetServoPos(9,512,768);
-    MFSetServoPos(6,520,768);
-    MFSetServoPos(10,512,768);
-    MFSetServoPos(4,512,768);
-    MFSetServoPos(8,512,768);
-    MFSetServoPos(3,512,300);
-    MFSetServoPos(7,512,300);
-    MFSetServoRotaSpd(1,740);
-    MFSetServoRotaSpd(2,-700);
+    MFSetServoPos(LELBOW,550,768);
+    MFSetServoPos(RELBOW,512,768);
+    MFSetServoPos(LHAND,520,768);
+    MFSetServoPos(RHAND,512,768);
+    MFSetServoPos(LSHOULDER,512,768);
+    MFSetServoPos(RSHOULDER,512,768);
+    MFSetServoPos(LFOOT,512,300);
+    MFSetServoPos(RFOOT,512,300);
+    MFSetServoRotaSpd(RWHEEL,740);
+    MFSetServoRotaSpd(LWHEEL,-700);
     MFServoAction();
     DelayMS(200);
-    MFSetServoRotaSpd(1,330);
-    MFSetServoRotaSpd(2,-310);
+    MFSetServoRotaSpd(RWHEEL,330);
+    MFSetServoRotaSpd(LWHEEL,-310);
     MFServoAction();
     DelayMS(750);
     stop();
@@ -215,86 +216,86 @@ void back_stand(){
 
 // 左手攻击，需要提前保持预警状态
 void hit_left(){
-    MFSetServoPos(5,630,968);
-    MFSetServoPos(6,580,968);
+    MFSetServoPos(LELBOW,630,968);
+    MFSetServoPos(LHAND,580,968);
     MFServoAction();
     DelayMS(700);
-    MFSetServoPos(5,680,612);
-    MFSetServoPos(6,630,612);
+    MFSetServoPos(LELBOW,680,612);
+    MFSetServoPos(LHAND,630,612);
     MFServoAction();
     DelayMS(1000);
 }
 
 // 右手攻击，需要提前保持预警状态
 void hit_right(){
-    MFSetServoPos(9,430,968);
-    MFSetServoPos(10,470,968);
+    MFSetServoPos(RELBOW,430,968);
+    MFSetServoPos(RHAND,470,968);
     MFServoAction();
     DelayMS(700);
-    MFSetServoPos(9,740,612);
-    MFSetServoPos(10,780,612);
+    MFSetServoPos(RELBOW,740,612);
+    MFSetServoPos(RHAND,780,612);
     MFServoAction();
     DelayMS(1000);
 }
 // 打击动作1，手抬起
 void hit_1(){
-    MFSetServoPos(4,170,512);
-    MFSetServoPos(5,550,256);
-    MFSetServoPos(6,530,256);
-    MFSetServoPos(8,885,512);
-    MFSetServoPos(9,512,256);
-    MFSetServoPos(10,512,256);
+    MFSetServoPos(LSHOULDER,170,512);
+    MFSetServoPos(LELBOW,550,256);
+    MFSetServoPos(LHAND,530,256);
+    MFSetServoPos(RSHOULDER,885,512);
+    MFSetServoPos(RELBOW,512,256);
+    MFSetServoPos(RHAND,512,256);
     MFServoAction();
 }
 
 //打击动作2，前方散开攻击
 void hit_2(){
-    MFSetServoPos(5,630,968);
-    MFSetServoPos(6,580,968);
-    MFSetServoPos(9,430,968);
-    MFSetServoPos(10,470,968);
-    MFSetServoPos(4,160,512);
-    MFSetServoPos(8,250,512);
+    MFSetServoPos(LELBOW,630,968);
+    MFSetServoPos(LHAND,580,968);
+    MFSetServoPos(RELBOW,430,968);
+    MFSetServoPos(RHAND,470,968);
+    MFSetServoPos(LSHOULDER,160,512);
+    MFSetServoPos(RSHOULDER,250,512);
     MFServoAction();
     DelayMS(600);
-    MFSetServoPos(5,320,256);
-    MFSetServoPos(6,270,256);
-    MFSetServoPos(9,740,256);
-    MFSetServoPos(10,780,256);
+    MFSetServoPos(LELBOW,320,256);
+    MFSetServoPos(LHAND,270,256);
+    MFSetServoPos(RELBOW,740,256);
+    MFSetServoPos(RHAND,780,256);
     MFServoAction();
     DelayMS(1000);
 }
 
 //打击动作3，雨刮式攻击
 void hit_3(){
-    MFSetServoPos(4,170,812);
-    MFSetServoPos(8,180,812);
-    MFSetServoPos(5,420,812);
-    MFSetServoPos(6,370,812);
-    MFSetServoPos(9,380,812);
-    MFSetServoPos(10,420,812);
+    MFSetServoPos(LSHOULDER,170,812);
+    MFSetServoPos(RSHOULDER,180,812);
+    MFSetServoPos(LELBOW,420,812);
+    MFSetServoPos(LHAND,370,812);
+    MFSetServoPos(RELBOW,380,812);
+    MFSetServoPos(RHAND,420,812);
     MFServoAction();
     DelayMS(700);
-    MFSetServoPos(5,680,812);
-    MFSetServoPos(6,630,812);
-    MFSetServoPos(9,640,812);
-    MFSetServoPos(10,680,812);
+    MFSetServoPos(LELBOW,680,812);
+    MFSetServoPos(LHAND,630,812);
+    MFSetServoPos(RELBOW,640,812);
+    MFSetServoPos(RHAND,680,812);
     MFServoAction();
     DelayMS(700);
 }
 
 void hit_4(){
 	
-	MFSetServoPos(5,380,512);
-    MFSetServoPos(6,330,512);
-    MFSetServoPos(9,340,512);
-    MFSetServoPos(10,380,512);
+	MFSetServoPos(LELBOW,380,512);
+    MFSetServoPos(LHAND,330,512);
+    MFSetServoPos(RELBOW,340,512);
+    MFSetServoPos(RHAND,380,512);
     MFServoAction();
     DelayMS(700);
-	MFSetServoPos(4,170,768);
-    MFSetServoPos(8,885,768);
-    MFSetServoRotaSpd(1,-500);
-    MFSetServoRotaSpd(2,-515);
+	MFSetServoPos(LSHOULDER,170,768);
+    MFSetServoPos(RSHOULDER,885,768);
+    MFSetServoRotaSpd(RWHEEL,-500);
+    MFSetServoRotaSpd(LWHEEL,-515);
     MFServoAction();
     DelayMS(1800);
 }
@@ -302,66 +303,66 @@ void hit_4(){
 // 前推攻击
 void hit_5(){
     // 收回
-    MFSetServoPos(4,201,600);
-    MFSetServoPos(5,881,600);
-    MFSetServoPos(6,113,600);
-    MFSetServoPos(8,201,600);
-    MFSetServoPos(9,165,600);
-    MFSetServoPos(10,921,600);
+    MFSetServoPos(LSHOULDER,201,600);
+    MFSetServoPos(LELBOW,881,600);
+    MFSetServoPos(LHAND,113,600);
+    MFSetServoPos(RSHOULDER,201,600);
+    MFSetServoPos(RELBOW,165,600);
+    MFSetServoPos(RHAND,921,600);
     MFServoAction();
     DelayMS(1000);
     // 攻击
-    MFSetServoPos(4,201,900);
-    MFSetServoPos(5,436,900);
-    MFSetServoPos(6,445,900);
-    MFSetServoPos(8,201,900);
-    MFSetServoPos(9,601,900);
-    MFSetServoPos(10,573,900);
+    MFSetServoPos(LSHOULDER,201,900);
+    MFSetServoPos(LELBOW,436,900);
+    MFSetServoPos(LHAND,445,900);
+    MFSetServoPos(RSHOULDER,201,900);
+    MFSetServoPos(RELBOW,601,900);
+    MFSetServoPos(RHAND,573,900);
     MFServoAction();
     DelayMS(500);
 }
 
 // 预攻击姿势
 void alert(){
-    MFSetServoPos(4,160,812);
-    MFSetServoPos(8,250,812);
-    MFSetServoPos(5,320,256);
-    MFSetServoPos(6,270,256);
-    MFSetServoPos(9,740,256);
-    MFSetServoPos(10,780,256);
+    MFSetServoPos(LSHOULDER,160,812);
+    MFSetServoPos(RSHOULDER,250,812);
+    MFSetServoPos(LELBOW,320,256);
+    MFSetServoPos(LHAND,270,256);
+    MFSetServoPos(RELBOW,740,256);
+    MFSetServoPos(RHAND,780,256);
     MFServoAction();
 }
 
 // 预攻击姿势
 void alert_delay(){
-    MFSetServoPos(4,160,812);
-    MFSetServoPos(8,250,812);
+    MFSetServoPos(LSHOULDER,160,812);
+    MFSetServoPos(RSHOULDER,250,812);
     MFServoAction();
     DelayMS(600);
-    MFSetServoPos(5,320,256);
-    MFSetServoPos(6,270,256);
-    MFSetServoPos(9,740,256);
-    MFSetServoPos(10,780,256);
+    MFSetServoPos(LELBOW,320,256);
+    MFSetServoPos(LHAND,270,256);
+    MFSetServoPos(RELBOW,740,256);
+    MFSetServoPos(RHAND,780,256);
     MFServoAction();
 }
 
 //和蔼
 void szyf(){
-    MFSetServoPos(4,239,512);
-    MFSetServoPos(8,989,512);
+    MFSetServoPos(LSHOULDER,239,512);
+    MFSetServoPos(RSHOULDER,989,512);
     MFServoAction();
     DelayMS(500);
-    MFSetServoPos(5,481,600);
-    MFSetServoPos(6,402,600);
-    MFSetServoPos(9,550,600);
-    MFSetServoPos(10,629,600);
+    MFSetServoPos(LELBOW,481,600);
+    MFSetServoPos(LHAND,402,600);
+    MFSetServoPos(RELBOW,550,600);
+    MFSetServoPos(RHAND,629,600);
     MFServoAction();
 }
 
 //自动巡航
 void autopilot(int L1, int L2, int R1, int R2) {
-    MFSetServoPos(3, 472, 256);
-    MFSetServoPos(7, 472, 256);
+    MFSetServoPos(LFOOT, 472, 256);
+    MFSetServoPos(RFOOT, 472, 256);
     MFServoAction();
     auto_pilot_index = 0;
     if(L1 == 1) {
@@ -536,8 +537,8 @@ int main()
             }
             if (attack_times % 3 == 0) {
                 alert_delay();
-                MFSetServoRotaSpd(1, 400);
-                MFSetServoRotaSpd(2, -420);
+                MFSetServoRotaSpd(RWHEEL, 400);
+                MFSetServoRotaSpd(LWHEEL, -420);
                 MFServoAction();
                 DelayMS(1000);  //后退500ms
                 autopilot(FORWARD);
@@ -581,8 +582,8 @@ int main()
             }
             if (attack_times % 3 == 0) {
                 alert_delay();
-                MFSetServoRotaSpd(1, 400);
-                MFSetServoRotaSpd(2, -420);
+                MFSetServoRotaSpd(RWHEEL, 400);
+                MFSetServoRotaSpd(LWHEEL, -420);
                 MFServoAction();
                 DelayMS(1000);  //后退500ms
                 autopilot(FORWARD);
@@ -599,8 +600,8 @@ int main()
             }
             if (attack_times % 3 == 0) {
                 alert_delay();
-                MFSetServoRotaSpd(1, 400);
-                MFSetServoRotaSpd(2, -420);
+                MFSetServoRotaSpd(RWHEEL, 400);
+                MFSetServoRotaSpd(LWHEEL, -420);
                 MFServoAction();
                 DelayMS(1000);  //后退500ms
                 autopilot(FORWARD);
