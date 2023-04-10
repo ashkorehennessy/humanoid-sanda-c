@@ -2,6 +2,7 @@
 uint8 SERVO_MAPPING[10] = {1,2,3,4,5,6,7,8,9,10};
 uint8 auto_pilot_index = 0;
 #define FORWARD 0,0,0,0
+#define STOP 1,1,1,1
 //机器人动作初始化
 void init(){
     MFSetServoPos(3,512,512);
@@ -25,9 +26,17 @@ void forward(){
     DelayMS(300);
 }
 
+//加速
 void boost(){
     MFSetServoRotaSpd(1,-520);
     MFSetServoRotaSpd(2,560);
+    MFServoAction();
+    DelayMS(300);
+}
+//加速后退
+void boost_back(){
+    MFSetServoRotaSpd(1,620);
+    MFSetServoRotaSpd(2,-660);
     MFServoAction();
     DelayMS(300);
 }
@@ -204,6 +213,29 @@ void back_stand(){
     DelayMS(1000);
 }
 
+// 左手攻击，需要提前保持预警状态
+void hit_left(){
+    MFSetServoPos(5,630,968);
+    MFSetServoPos(6,580,968);
+    MFServoAction();
+    DelayMS(700);
+    MFSetServoPos(5,680,612);
+    MFSetServoPos(6,630,612);
+    MFServoAction();
+    DelayMS(1000);
+}
+
+// 右手攻击，需要提前保持预警状态
+void hit_right(){
+    MFSetServoPos(9,430,968);
+    MFSetServoPos(10,470,968);
+    MFServoAction();
+    DelayMS(700);
+    MFSetServoPos(9,740,612);
+    MFSetServoPos(10,780,612);
+    MFServoAction();
+    DelayMS(1000);
+}
 // 打击动作1，手抬起
 void hit_1(){
     MFSetServoPos(4,170,512);
@@ -390,6 +422,9 @@ void autopilot(int L1, int L2, int R1, int R2) {
             turn_left();
             forward();
             break;
+        case 15: // 全部悬空，停止
+            stop();
+            break;
         default:break;
     }
 }
@@ -412,21 +447,23 @@ int main()
     int edge_L2; // 左后边缘检测
     int edge_R1; // 右前边缘检测
     int edge_R2; // 右后边缘检测
-    int enemy_B1; // 左后方敌人检测
-    int enemy_B2; // 右后方敌人检测
-    int enemy_F1; // 左前方敌人检测
-    int enemy_F2; // 右前方敌人检测
-
-    int attack_times = 0;  //记录攻击次数，每一轮攻击超过5次自动后退逃跑
+    int enemy_L1; // 左前方敌人检测
+    int enemy_L2; // 左侧敌人检测
+    int enemy_R1; // 右前方敌人检测
+    int enemy_R2; // 右侧敌人检测
+    int enemy_FRONT; // 前方敌人检测
+    int enemy_BACK; // 后方敌人检测
 
     // AD传感器输入
     int angle; // 倾角数值
     int distance; // 距离数值，距离越近数值越大
 
     int attacking = 0; // 正在攻击
+    int attack_times = 0;  //记录攻击次数，每一轮攻击超过3次自动后退逃跑
+
     MFInit();
     MFInitServoMapping(&SERVO_MAPPING[0],10);
-    MFSetPortDirect(0x00000F00);
+    MFSetPortDirect(0x00000C00);
     MFSetServoMode(1,1);
     MFSetServoMode(2,1);
     MFSetServoMode(3,0);
@@ -455,15 +492,27 @@ int main()
         edge_L2 = MFGetDigiInput(1);
         edge_R1 = MFGetDigiInput(2);
         edge_R2 = MFGetDigiInput(3);
-        enemy_B1 = MFGetDigiInput(4);   // 检测左后方敌人
-        enemy_B2 = MFGetDigiInput(5);   // 检测右后方敌人
-        enemy_F1 = MFGetDigiInput(6);   // 检测左前方敌人
-        enemy_F2 = MFGetDigiInput(7);   // 检测右前方敌人
-
+        enemy_L1 = MFGetDigiInput(4);   // 检测左前敌人
+        enemy_L2 = MFGetDigiInput(5);   // 检测左侧敌人
+        enemy_R1 = MFGetDigiInput(6);   // 检测右前敌人
+        enemy_R2 = MFGetDigiInput(7);   // 检测右侧敌人
+        enemy_FRONT = MFGetDigiInput(8);   // 检测前方敌人
+        enemy_BACK = MFGetDigiInput(9);   // 检测后方敌人及倒地预警
 
         // 获取AD输入
         angle = MFGetAD(0);
         distance = MFGetAD(1);
+
+        // 正在战斗且快被推倒时快速后退
+        if(enemy_FRONT == 0 && enemy_BACK == 0){
+            boost_back();
+            DelayMS(500);
+            go_back();
+            DelayMS(300);
+            stop();
+            autopilot(FORWARD);
+            continue;
+        }  
 
         // 前倒站起
         if (angle > 700){
@@ -485,7 +534,7 @@ int main()
             if (attacking == 0){
                 attacking = 1;
             }
-            if (attack_times % 5 == 0) {
+            if (attack_times % 3 == 0) {
                 alert_delay();
                 MFSetServoRotaSpd(1, 400);
                 MFSetServoRotaSpd(2, -420);
@@ -501,7 +550,7 @@ int main()
         }
         
         // 后方检测到敌人，仅转向
-        if (enemy_B1 == 0 || enemy_B2 == 0){
+        if (enemy_BACK == 0){
             if (attacking == 0){
                 turn_right();
                 DelayMS(300); //转太快容易倒
@@ -511,14 +560,24 @@ int main()
             continue;
         }
 
+        // 左侧检测到敌人
+        if (enemy_L2 == 0){
+            hit_left();
+            autopilot(STOP);
+        }
+        // 右侧检测到敌人
+        if (enemy_R2 == 0){
+            hit_right();
+            autopilot(STOP);
+        }
         // 左前方检测到敌人
-        if (enemy_F1 == 0) {
+        if (enemy_L1 == 0) {
             if (attacking == 0) {
                 //turn_left();
                 hit_3();
                 attack_times++;
             }
-            if (attack_times % 5 == 0) {
+            if (attack_times % 3 == 0) {
                 alert_delay();
                 MFSetServoRotaSpd(1, 400);
                 MFSetServoRotaSpd(2, -420);
@@ -530,13 +589,13 @@ int main()
             continue;
         }
         // 右前方检测到敌人
-        if (enemy_F2 == 0) {
+        if (enemy_R1 == 0) {
             if (attacking == 0) {
                 //turn_right();
                 hit_3();
                 attack_times++;
             }
-            if (attack_times % 5 == 0) {
+            if (attack_times % 3 == 0) {
                 alert_delay();
                 MFSetServoRotaSpd(1, 400);
                 MFSetServoRotaSpd(2, -420);
