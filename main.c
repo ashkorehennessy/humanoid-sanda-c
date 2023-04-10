@@ -564,11 +564,13 @@ int main()
         if (enemy_L2 == 0){
             hit_left();
             autopilot(STOP);
+            continue;
         }
         // 右侧检测到敌人
         if (enemy_R2 == 0){
             hit_right();
             autopilot(STOP);
+            continue;
         }
         // 左前方检测到敌人
         if (enemy_L1 == 0) {
