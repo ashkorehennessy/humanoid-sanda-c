@@ -1,16 +1,19 @@
 #include  "Apps/SystemTask.h"
 uint8 SERVO_MAPPING[10] = {1,2,3,4,5,6,7,8,9,10};
 uint8 auto_pilot_index = 0;
+#define FORWARD 0,0,0,0
 //机器人动作初始化
 void init(){
-    MFSetServoPos(3,512,256);
+    MFSetServoPos(3,512,512);
+    MFSetServoPos(5,550,512);
+    MFSetServoPos(6,550,512);
+    MFSetServoPos(7,512,512);
+    MFSetServoPos(9,512,512);
+    MFSetServoPos(10,512,512);
+    MFServoAction();
+    DelayMS(600);
     MFSetServoPos(4,512,256);
-    MFSetServoPos(5,550,256);
-    MFSetServoPos(6,550,256);
-    MFSetServoPos(7,512,256);
     MFSetServoPos(8,512,256);
-    MFSetServoPos(9,512,256);
-    MFSetServoPos(10,512,256);
     MFServoAction();
 }
 
@@ -19,14 +22,14 @@ void forward(){
     MFSetServoRotaSpd(1,-310);
     MFSetServoRotaSpd(2,330);
     MFServoAction();
-    DelayMS(400);
+    DelayMS(300);
 }
 
 void boost(){
     MFSetServoRotaSpd(1,-520);
-    MFSetServoRotaSpd(2,540);
+    MFSetServoRotaSpd(2,560);
     MFServoAction();
-    DelayMS(400);
+    DelayMS(300);
 }
 
 //后退
@@ -173,8 +176,6 @@ void back_5(){
 
 //前倒站起
 void front_stand(){
-    init();
-    DelayMS(500);
     front_1();
     DelayMS(600);
     front_2();
@@ -216,50 +217,54 @@ void hit_1(){
 
 //打击动作2，前方散开攻击
 void hit_2(){
+    MFSetServoPos(5,630,968);
+    MFSetServoPos(6,580,968);
+    MFSetServoPos(9,430,968);
+    MFSetServoPos(10,470,968);
     MFSetServoPos(4,160,512);
     MFSetServoPos(8,250,512);
+    MFServoAction();
+    DelayMS(600);
     MFSetServoPos(5,320,256);
     MFSetServoPos(6,270,256);
     MFSetServoPos(9,740,256);
     MFSetServoPos(10,780,256);
-    //forward();
-    DelayMS(600);
-    MFSetServoPos(5,630,768);
-    MFSetServoPos(6,580,768);
-    MFSetServoPos(9,430,768);
-    MFSetServoPos(10,470,768);
-    //go_back();
+    MFServoAction();
+    DelayMS(1000);
 }
 
 //打击动作3，雨刮式攻击
 void hit_3(){
-    MFSetServoPos(4,170,512);
-    MFSetServoPos(8,180,512);
-    MFSetServoPos(5,420,512);
-    MFSetServoPos(6,370,512);
-    MFSetServoPos(9,380,512);
-    MFSetServoPos(10,420,512);
+    MFSetServoPos(4,170,812);
+    MFSetServoPos(8,180,812);
+    MFSetServoPos(5,420,812);
+    MFSetServoPos(6,370,812);
+    MFSetServoPos(9,380,812);
+    MFSetServoPos(10,420,812);
     MFServoAction();
-    DelayMS(1000);
-    MFSetServoPos(5,680,512);
-    MFSetServoPos(6,630,512);
-    MFSetServoPos(9,640,512);
-    MFSetServoPos(10,680,512);
+    DelayMS(700);
+    MFSetServoPos(5,680,812);
+    MFSetServoPos(6,630,812);
+    MFSetServoPos(9,640,812);
+    MFSetServoPos(10,680,812);
     MFServoAction();
-    DelayMS(1000);
+    DelayMS(700);
 }
 
 void hit_4(){
-	MFSetServoPos(8,885,768);
-	MFSetServoPos(4,170,768);
-	MFSetServoPos(5,680,512);
-    MFSetServoPos(6,630,512);
-    MFSetServoPos(9,640,512);
-    MFSetServoPos(10,680,512);
-    MFSetServoRotaSpd(1,-600);
-    MFSetServoRotaSpd(2,-620);
+	
+	MFSetServoPos(5,380,512);
+    MFSetServoPos(6,330,512);
+    MFSetServoPos(9,340,512);
+    MFSetServoPos(10,380,512);
     MFServoAction();
-    DelayMS(1500);
+    DelayMS(700);
+	MFSetServoPos(4,170,768);
+    MFSetServoPos(8,885,768);
+    MFSetServoRotaSpd(1,-500);
+    MFSetServoRotaSpd(2,-515);
+    MFServoAction();
+    DelayMS(1800);
 }
 
 // 前推攻击
@@ -286,12 +291,25 @@ void hit_5(){
 
 // 预攻击姿势
 void alert(){
-    MFSetServoPos(4,201,300);
-    MFSetServoPos(5,881,300);
-    MFSetServoPos(6,113,300);
-    MFSetServoPos(8,201,300);
-    MFSetServoPos(9,165,300);
-    MFSetServoPos(10,921,300);
+    MFSetServoPos(4,160,812);
+    MFSetServoPos(8,250,812);
+    MFSetServoPos(5,320,256);
+    MFSetServoPos(6,270,256);
+    MFSetServoPos(9,740,256);
+    MFSetServoPos(10,780,256);
+    MFServoAction();
+}
+
+// 预攻击姿势
+void alert_delay(){
+    MFSetServoPos(4,160,812);
+    MFSetServoPos(8,250,812);
+    MFServoAction();
+    DelayMS(600);
+    MFSetServoPos(5,320,256);
+    MFSetServoPos(6,270,256);
+    MFSetServoPos(9,740,256);
+    MFSetServoPos(10,780,256);
     MFServoAction();
 }
 
@@ -310,6 +328,9 @@ void szyf(){
 
 //自动巡航
 void autopilot(int L1, int L2, int R1, int R2) {
+    MFSetServoPos(3, 472, 256);
+    MFSetServoPos(7, 472, 256);
+    MFServoAction();
     auto_pilot_index = 0;
     if(L1 == 1) {
         auto_pilot_index += 1;
@@ -376,14 +397,11 @@ void autopilot(int L1, int L2, int R1, int R2) {
 //刷新传感器信号缓冲
 void flush_sensor(){
     int i,j;
-    for(j=0;j<10;j+=1){
-
-        for(i=0;i<2;i+=1){
-            MFGetAD(i);
-        }
-        for(i=0;i<4;i+=1){
-            MFGetDigiInput(i);
-        }
+    for(i=0;i<2;i+=1){
+        j = MFGetAD(i);
+    }
+    for(i=0;i<8;i+=1){
+        j = MFGetDigiInput(i);
     }
 }
 
@@ -398,6 +416,8 @@ int main()
     int enemy_B2; // 右后方敌人检测
     int enemy_F1; // 左前方敌人检测
     int enemy_F2; // 右前方敌人检测
+
+    int attack_times = 0;  //记录攻击次数，每一轮攻击超过5次自动后退逃跑
 
     // AD传感器输入
     int angle; // 倾角数值
@@ -426,7 +446,7 @@ int main()
     DelayMS(2000);
     boost();
     DelayMS(1000);
-    alert();
+    alert_delay();
 
     for(;;){
         
@@ -440,6 +460,7 @@ int main()
         enemy_F1 = MFGetDigiInput(6);   // 检测左前方敌人
         enemy_F2 = MFGetDigiInput(7);   // 检测右前方敌人
 
+
         // 获取AD输入
         angle = MFGetAD(0);
         distance = MFGetAD(1);
@@ -448,17 +469,15 @@ int main()
         if (angle > 700){
             stop();
             front_stand();
-            autopilot(0,0,0,0);
+            autopilot(FORWARD);
             continue;
-            //flush_sensor();
         }
         // 后倒站起
         if (angle < 170){
             stop();
             back_stand();
-            autopilot(0,0,0,0);
+            autopilot(FORWARD);
             continue;
-            //flush_sensor();
         }
         // 检测到敌人
         if (distance > 100){
@@ -466,37 +485,66 @@ int main()
             if (attacking == 0){
                 attacking = 1;
             }
-            hit_5();
+            if (attack_times % 5 == 0) {
+                alert_delay();
+                MFSetServoRotaSpd(1, 400);
+                MFSetServoRotaSpd(2, -420);
+                MFServoAction();
+                DelayMS(1000);  //后退500ms
+                autopilot(FORWARD);
+            }
+            hit_2();
+            attack_times++;
         } else { // 检测不到敌人
             attacking = 0;
             alert();
         }
         
         // 后方检测到敌人，仅转向
-        if (enemy_B1 == 0 || enemy_B2 == 0) {
+        if (enemy_B1 == 0 || enemy_B2 == 0){
             if (attacking == 0){
                 turn_right();
                 DelayMS(300); //转太快容易倒
                 turn_right();
             }
-            autopilot(0,0,0,0);
+            autopilot(FORWARD);
             continue;
         }
 
         // 左前方检测到敌人
         if (enemy_F1 == 0) {
             if (attacking == 0) {
-                turn_left();
+                //turn_left();
+                hit_3();
+                attack_times++;
             }
-            autopilot(0,0,0,0);
+            if (attack_times % 5 == 0) {
+                alert_delay();
+                MFSetServoRotaSpd(1, 400);
+                MFSetServoRotaSpd(2, -420);
+                MFServoAction();
+                DelayMS(1000);  //后退500ms
+                autopilot(FORWARD);
+            }
+            autopilot(FORWARD);
             continue;
         }
         // 右前方检测到敌人
         if (enemy_F2 == 0) {
             if (attacking == 0) {
-                turn_right();
+                //turn_right();
+                hit_3();
+                attack_times++;
             }
-            autopilot(0,0,0,0);
+            if (attack_times % 5 == 0) {
+                alert_delay();
+                MFSetServoRotaSpd(1, 400);
+                MFSetServoRotaSpd(2, -420);
+                MFServoAction();
+                DelayMS(1000);  //后退500ms
+                autopilot(FORWARD);
+            }
+            autopilot(FORWARD);
             continue;
         }
         // 自动巡航
