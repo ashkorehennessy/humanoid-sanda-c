@@ -300,28 +300,6 @@ void hit_4(){
     DelayMS(1800);
 }
 
-// 前推攻击
-void hit_5(){
-    // 收回
-    MFSetServoPos(LSHOULDER,201,600);
-    MFSetServoPos(LELBOW,881,600);
-    MFSetServoPos(LHAND,113,600);
-    MFSetServoPos(RSHOULDER,201,600);
-    MFSetServoPos(RELBOW,165,600);
-    MFSetServoPos(RHAND,921,600);
-    MFServoAction();
-    DelayMS(1000);
-    // 攻击
-    MFSetServoPos(LSHOULDER,201,900);
-    MFSetServoPos(LELBOW,436,900);
-    MFSetServoPos(LHAND,445,900);
-    MFSetServoPos(RSHOULDER,201,900);
-    MFSetServoPos(RELBOW,601,900);
-    MFSetServoPos(RHAND,573,900);
-    MFServoAction();
-    DelayMS(500);
-}
-
 // 预攻击姿势
 void alert(){
     MFSetServoPos(LSHOULDER,160,812);
@@ -427,17 +405,6 @@ void autopilot(int L1, int L2, int R1, int R2) {
             stop();
             break;
         default:break;
-    }
-}
-
-//刷新传感器信号缓冲
-void flush_sensor(){
-    int i,j;
-    for(i=0;i<2;i+=1){
-        j = MFGetAD(i);
-    }
-    for(i=0;i<8;i+=1){
-        j = MFGetDigiInput(i);
     }
 }
 
