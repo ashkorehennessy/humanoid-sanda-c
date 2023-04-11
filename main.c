@@ -511,20 +511,25 @@ int main()
                 MFServoAction();
                 DelayMS(1000);  //后退500ms
                 autopilot(FORWARD);
-            }
-            hit_2();
+            }            
+            MFSetServoPos(LFOOT,482,650);
+            MFSetServoPos(RFOOT,482,650);
+            MFServoAction();
+            hit_2();            
+            MFSetServoPos(LFOOT,502,512);
+            MFSetServoPos(RFOOT,502,512);
+            MFServoAction();
             attack_times++;
         } else { // 检测不到敌人
             attacking = 0;
             alert();
         }
         
-        // 后方检测到敌人，仅转向
+        // 后方检测到敌人，向前逃跑防止被偷袭
         if (enemy_BACK == 0){
             if (attacking == 0){
                 turn_right();
-                DelayMS(300); //转太快容易倒
-                turn_right();
+                forward();
             }
             autopilot(FORWARD);
             continue;
@@ -533,20 +538,22 @@ int main()
         // 左侧检测到敌人
         if (enemy_L2 == 0){
             hit_left();
+            turn_left();
             autopilot(STOP);
             continue;
         }
         // 右侧检测到敌人
         if (enemy_R2 == 0){
             hit_right();
+            turn_right();
             autopilot(STOP);
             continue;
         }
         // 左前方检测到敌人
         if (enemy_L1 == 0) {
             if (attacking == 0) {
-                //turn_left();
                 hit_3();
+                turn_right();
                 attack_times++;
             }
             if (attack_times % 3 == 0) {
@@ -563,8 +570,8 @@ int main()
         // 右前方检测到敌人
         if (enemy_R1 == 0) {
             if (attacking == 0) {
-                //turn_right();
                 hit_3();
+                turn_left();
                 attack_times++;
             }
             if (attack_times % 3 == 0) {
