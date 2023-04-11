@@ -361,8 +361,8 @@ void szyf(){
 
 //自动巡航
 void autopilot(int L1, int L2, int R1, int R2) {
-    MFSetServoPos(LFOOT, 472, 256);
-    MFSetServoPos(RFOOT, 472, 256);
+    MFSetServoPos(LFOOT, 502, 256);
+    MFSetServoPos(RFOOT, 502, 256);
     MFServoAction();
     auto_pilot_index = 0;
     if(L1 == 1) {
@@ -483,6 +483,8 @@ int main()
     init();
     DelayMS(2000);
     boost();
+    DelayMS(1000);
+    turn_right();
     DelayMS(1000);
     alert_delay();
 
