@@ -21,16 +21,16 @@ void init(){
 
 //前进
 void forward(){
-    MFSetServoRotaSpd(RWHEEL,-310);
-    MFSetServoRotaSpd(LWHEEL,330);
+    MFSetServoRotaSpd(RWHEEL,-330);
+    MFSetServoRotaSpd(LWHEEL,360);
     MFServoAction();
     DelayMS(300);
 }
 
 //加速
 void boost(){
-    MFSetServoRotaSpd(RWHEEL,-520);
-    MFSetServoRotaSpd(LWHEEL,560);
+    MFSetServoRotaSpd(RWHEEL,-480);
+    MFSetServoRotaSpd(LWHEEL,510);
     MFServoAction();
     DelayMS(300);
 }
@@ -52,16 +52,16 @@ void go_back(){
 
 //左转
 void turn_left(){
-    MFSetServoRotaSpd(RWHEEL,-450);
-    MFSetServoRotaSpd(LWHEEL,-470);
+    MFSetServoRotaSpd(RWHEEL,-480);
+    MFSetServoRotaSpd(LWHEEL,-505);
     MFServoAction();
     DelayMS(400);
 }
 
 //右转
 void turn_right(){
-    MFSetServoRotaSpd(RWHEEL,450);
-    MFSetServoRotaSpd(LWHEEL,470);
+    MFSetServoRotaSpd(RWHEEL,480);
+    MFSetServoRotaSpd(LWHEEL,505);
     MFServoAction();
     DelayMS(400);
 }
