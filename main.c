@@ -485,14 +485,14 @@ int main()
         }  
 
         // 前倒站起
-        if (angle > 700){
+        if (angle > 800){
             stop();
             front_stand();
             autopilot(FORWARD);
             continue;
         }
         // 后倒站起
-        if (angle < 170){
+        if (angle < 400){
             stop();
             back_stand();
             autopilot(FORWARD);
