@@ -550,19 +550,21 @@ int main()
         }
         // 检测到敌人
         if (distance > 100 || enemy_FRONT == 0){
+            boost();
+            MFSetServoPos(LFOOT,-482,650);
+            MFSetServoPos(RFOOT,482,650);
+            MFServoAction();
+            hit_2();
+            forward();            
+            MFSetServoPos(LFOOT,-502,512);
+            MFSetServoPos(RFOOT,502,512);
+            MFServoAction();
             if (attack_times % 3 == 0) {
                 attack_back();
-            } else {
-                MFSetServoPos(LFOOT,-482,650);
-                MFSetServoPos(RFOOT,482,650);
-                MFServoAction();
-                hit_2();            
-                MFSetServoPos(LFOOT,-502,512);
-                MFSetServoPos(RFOOT,502,512);
-                MFServoAction();
-                stop();
             }
             attack_times++;
+            autopilot();
+            continue;
         } else { // 检测不到敌人
             attacking = 0;
             alert();
