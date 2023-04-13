@@ -73,6 +73,13 @@ void stop(){
     MFServoAction();
 }
 
+//前倒，重新站起动作0，肩部往前到极限
+void front_0(){
+    MFSetServoPos(LSHOULDER,100,780);
+    MFSetServoPos(RSHOULDER,90,780);
+    MFServoAction();
+}
+
 //前倒，重新站起动作1，肘部外伸
 void front_1(){
     MFSetServoPos(LELBOW,910,768);
@@ -186,6 +193,8 @@ void back_5(){
 
 //前倒站起
 void front_stand(){
+    front_0();
+    DelayMS(700);
     front_1();
     DelayMS(600);
     front_2();
@@ -224,8 +233,6 @@ void hit_left(){
     DelayMS(800);
     MFSetServoPos(LELBOW,680,612);
     MFSetServoPos(LHAND,630,612);
-    MFSetServoRotaSpd(RWHEEL,330);
-    MFSetServoRotaSpd(LWHEEL,350);
     MFServoAction();
 }
 
@@ -239,8 +246,6 @@ void hit_right(){
     DelayMS(800);
     MFSetServoPos(RELBOW,740,612);
     MFSetServoPos(RHAND,780,612);
-    MFSetServoRotaSpd(RWHEEL,-330);
-    MFSetServoRotaSpd(LWHEEL,-350);
     MFServoAction();
 }
 // 打击动作1，手抬起
@@ -547,7 +552,7 @@ int main()
         if (distance > 100 || enemy_FRONT == 0){
             if (attack_times % 3 == 0) {
                 attack_back();
-            } else {           
+            } else {
                 MFSetServoPos(LFOOT,-482,650);
                 MFSetServoPos(RFOOT,482,650);
                 MFServoAction();
@@ -574,6 +579,7 @@ int main()
         if (enemy_L2 == 0){
             hit_left();
             attack_times++;
+            go_back();
             if (attack_times % 3 == 0) {
                 attack_back();
             }
@@ -584,6 +590,7 @@ int main()
         if (enemy_R2 == 0){
             hit_right();
             attack_times++;
+            go_back();
             if (attack_times % 3 == 0) {
                 attack_back();
             }
