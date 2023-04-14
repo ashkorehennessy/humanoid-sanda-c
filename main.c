@@ -436,8 +436,8 @@ void attacking_back(){
 
 void attacking_back_left(){
     alert_delay();
-    MFSetServoPos(LFOOT,492,650);
-    MFSetServoPos(RFOOT,492,650);
+    MFSetServoPos(LFOOT,472,650);
+    MFSetServoPos(RFOOT,472,650);
     MFSetServoRotaSpd(RWHEEL,500);
     MFSetServoRotaSpd(LWHEEL,-420);
     MFServoAction();
@@ -446,8 +446,8 @@ void attacking_back_left(){
 }
 void attacking_back_right(){
     alert_delay();
-    MFSetServoPos(LFOOT,492,650);
-    MFSetServoPos(RFOOT,492,650);
+    MFSetServoPos(LFOOT,472,650);
+    MFSetServoPos(RFOOT,472,650);
     MFSetServoRotaSpd(RWHEEL,400);
     MFSetServoRotaSpd(LWHEEL,-520);
     MFServoAction();
