@@ -22,7 +22,7 @@ void init(){
 //前进
 void forward(){
     MFSetServoRotaSpd(RWHEEL,-330);
-    MFSetServoRotaSpd(LWHEEL,350);
+    MFSetServoRotaSpd(LWHEEL,340);
     MFServoAction();
     DelayMS(300);
 }
@@ -75,8 +75,8 @@ void stop(){
 
 //前倒，重新站起动作0，肩部往前到极限
 void front_0(){
-    MFSetServoPos(LSHOULDER,100,780);
-    MFSetServoPos(RSHOULDER,90,780);
+    MFSetServoPos(LSHOULDER,70,780);
+    MFSetServoPos(RSHOULDER,140,780);
     MFServoAction();
 }
 
@@ -150,10 +150,10 @@ void back_4(){
 
 //前倒，重新站起动作5，手部往外一点，肩部往下一点，腿部后弯
 void front_5(){
-    MFSetServoPos(LELBOW,550,768);
-    MFSetServoPos(RELBOW,512,768);
-    MFSetServoPos(LHAND,520,768);
-    MFSetServoPos(RHAND,512,768);
+    MFSetServoPos(LELBOW,550,300);
+    MFSetServoPos(RELBOW,512,300);
+    MFSetServoPos(LHAND,520,300);
+    MFSetServoPos(RHAND,512,300);
     MFSetServoPos(LSHOULDER,512,768);
     MFSetServoPos(RSHOULDER,512,768);
     MFSetServoPos(LFOOT,512,300);
@@ -172,10 +172,10 @@ void front_5(){
 
 //后倒，重新站起动作5，腿部伸直，肩部伸直，移动轮子平衡重心
 void back_5(){
-    MFSetServoPos(LELBOW,550,768);
-    MFSetServoPos(RELBOW,512,768);
-    MFSetServoPos(LHAND,520,768);
-    MFSetServoPos(RHAND,512,768);
+    MFSetServoPos(LELBOW,550,300);
+    MFSetServoPos(RELBOW,512,300);
+    MFSetServoPos(LHAND,520,300);
+    MFSetServoPos(RHAND,512,300);
     MFSetServoPos(LSHOULDER,512,768);
     MFSetServoPos(RSHOULDER,512,768);
     MFSetServoPos(LFOOT,512,300);
@@ -193,6 +193,7 @@ void back_5(){
 
 //前倒站起
 void front_stand(){
+    DelayMS(300);
     front_0();
     DelayMS(700);
     front_1();
@@ -225,6 +226,8 @@ void back_stand(){
 
 // 左手攻击，需要提前保持预警状态
 void hit_left(){
+    MFSetServoPos(LFOOT,492,650);
+    MFSetServoPos(RFOOT,492,650);
     MFSetServoPos(LELBOW,630,968);
     MFSetServoPos(LHAND,580,968);
     MFSetServoRotaSpd(RWHEEL,-580);
@@ -238,6 +241,8 @@ void hit_left(){
 
 // 右手攻击，需要提前保持预警状态
 void hit_right(){
+    MFSetServoPos(LFOOT,492,650);
+    MFSetServoPos(RFOOT,492,650);
     MFSetServoPos(RELBOW,430,968);
     MFSetServoPos(RHAND,470,968);
     MFSetServoRotaSpd(RWHEEL,580);
@@ -261,6 +266,8 @@ void hit_1(){
 
 //打击动作2，前方散开攻击
 void hit_2(){
+    MFSetServoPos(LFOOT,492,650);
+    MFSetServoPos(RFOOT,492,650);
     MFSetServoPos(LELBOW,630,968);
     MFSetServoPos(LHAND,580,968);
     MFSetServoPos(RELBOW,430,968);
@@ -268,15 +275,21 @@ void hit_2(){
     MFSetServoPos(LSHOULDER,160,512);
     MFSetServoPos(RSHOULDER,250,512);
     MFServoAction();
-    DelayMS(600);
-    MFSetServoPos(LELBOW,320,256);
-    MFSetServoPos(LHAND,270,256);
-    MFSetServoPos(RELBOW,740,256);
-    MFSetServoPos(RHAND,780,256);
+    DelayMS(500);
+    MFSetServoPos(LELBOW,320,968);
+    MFSetServoPos(LHAND,270,968);
+    MFSetServoPos(RELBOW,740,968);
+    MFSetServoPos(RHAND,780,968);
+    MFSetServoPos(LFOOT,502,512);
+    MFSetServoPos(RFOOT,502,512);
+    MFSetServoRotaSpd(LWHEEL,0);
+    MFSetServoRotaSpd(RWHEEL,0);
     MFServoAction();
-    DelayMS(1000);
+
 }
 void hit_3_L(){
+    MFSetServoPos(LFOOT,492,650);
+    MFSetServoPos(RFOOT,492,650);
     MFSetServoRotaSpd(RWHEEL,-580);
     MFSetServoRotaSpd(LWHEEL,-605);
     MFServoAction();
@@ -299,9 +312,14 @@ void hit_3_L(){
     MFSetServoPos(RHAND,420,812);
     MFServoAction();
     DelayMS(600);
+    MFSetServoPos(LFOOT,502,512);
+    MFSetServoPos(RFOOT,502,512);
+    MFServoAction();
 }
 //打击动作3，雨刮式攻击
 void hit_3_R(){
+    MFSetServoPos(LFOOT,492,650);
+    MFSetServoPos(RFOOT,492,650);
     MFSetServoRotaSpd(RWHEEL,580);
     MFSetServoRotaSpd(LWHEEL,605);
     MFServoAction();
@@ -324,10 +342,15 @@ void hit_3_R(){
     MFSetServoPos(RHAND,680,812);
     MFServoAction();
     DelayMS(600);
+    MFSetServoPos(LFOOT,502,512);
+    MFSetServoPos(RFOOT,502,512);
+    MFServoAction();
 }
 
 void hit_4(){
 	
+    MFSetServoPos(LFOOT,492,650);
+    MFSetServoPos(RFOOT,492,650);
 	MFSetServoPos(LELBOW,380,512);
     MFSetServoPos(LHAND,330,512);
     MFSetServoPos(RELBOW,340,512);
@@ -340,6 +363,9 @@ void hit_4(){
     MFSetServoRotaSpd(LWHEEL,-515);
     MFServoAction();
     DelayMS(1800);
+    MFSetServoPos(LFOOT,502,512);
+    MFSetServoPos(RFOOT,502,512);
+    MFServoAction();
 }
 
 // 预攻击姿势
@@ -399,7 +425,7 @@ void attack_back(){
     MFSetServoRotaSpd(RWHEEL, 400);
     MFSetServoRotaSpd(LWHEEL, -420);
     MFServoAction();
-    DelayMS(1000);  //后退1000ms
+    DelayMS(500);  //后退1000ms
     forward();
 }
 //自动巡航
@@ -490,6 +516,7 @@ int main()
 
     int attacking = 0; // 正在攻击
     int attack_times = 0;  //记录攻击次数，每一轮攻击超过3次自动后退逃跑
+    int is_init = 1;
 
     MFInit();
     MFInitServoMapping(&SERVO_MAPPING[0],10);
@@ -513,10 +540,15 @@ int main()
     DelayMS(2000);
     boost();
     DelayMS(1500);
-    alert_delay();
     forward();
 
     for(;;){
+        if(is_init == 1){
+            if(MFGetAD(0) < 1000 && MFGetAD(0 > 400)){
+                alert_delay();
+                is_init = 0;
+            }
+        }
         
         // 获取IO输入
         enemy_L1 = MFGetDigiInput(4);   // 检测左前敌人
@@ -535,8 +567,10 @@ int main()
             stop();
             front_stand();
             reinit();
-            alert_delay();
-            forward();
+            autopilot();
+            MFSetServoPos(LFOOT, 502, 256);
+            MFSetServoPos(RFOOT, 502, 256);
+            MFServoAction();
             continue;
         }
         // 后倒站起
@@ -544,21 +578,15 @@ int main()
             stop();
             back_stand();
             reinit();
-            alert_delay();
-            forward();
+            autopilot();
+            MFSetServoPos(LFOOT, 502, 256);
+            MFSetServoPos(RFOOT, 502, 256);
+            MFServoAction();
             continue;
         }
         // 检测到敌人
         if (distance > 100 || enemy_FRONT == 0){
-            boost();
-            MFSetServoPos(LFOOT,-482,650);
-            MFSetServoPos(RFOOT,482,650);
-            MFServoAction();
             hit_2();
-            forward();            
-            MFSetServoPos(LFOOT,-502,512);
-            MFSetServoPos(RFOOT,502,512);
-            MFServoAction();
             if (attack_times % 3 == 0) {
                 attack_back();
             }
@@ -581,7 +609,6 @@ int main()
         if (enemy_L2 == 0){
             hit_left();
             attack_times++;
-            go_back();
             if (attack_times % 3 == 0) {
                 attack_back();
             }
@@ -592,7 +619,6 @@ int main()
         if (enemy_R2 == 0){
             hit_right();
             attack_times++;
-            go_back();
             if (attack_times % 3 == 0) {
                 attack_back();
             }
