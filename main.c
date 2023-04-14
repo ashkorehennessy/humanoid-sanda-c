@@ -1,6 +1,7 @@
 #include  "Apps/SystemTask.h"
 uint8 SERVO_MAPPING[10] = {1,2,3,4,5,6,7,8,9,10};
 uint8 auto_pilot_index = 0;
+uint8 stuck = 0;
 enum servoID{RWHEEL = 1, LWHEEL, LFOOT, LSHOULDER, LELBOW, LHAND, RFOOT, RSHOULDER, RELBOW, RHAND};
 //机器人动作初始化
 void init(){
@@ -396,6 +397,19 @@ void alert_delay(){
     MFSetServoPos(RHAND,780,256);
     MFServoAction();
 }
+
+//手部放松
+void release(){
+    MFSetServoPos(LSHOULDER,512,256);
+    MFSetServoPos(RSHOULDER,512,256);
+    MFSetServoPos(LELBOW,550,512);
+    MFSetServoPos(LHAND,550,512);
+    MFSetServoPos(RELBOW,512,512);
+    MFSetServoPos(RHAND,512,512);
+    MFServoAction();
+}
+
+//设置初始化
 void reinit(){
     MFInit();
     MFInitServoMapping(&SERVO_MAPPING[0],10);
@@ -609,6 +623,15 @@ int main()
             MFSetServoPos(RFOOT, 502, 256);
             MFServoAction();
             continue;
+        }
+        //卡死检测
+        if (MFGetServoPos(LSHOULDER) > 400 || MFGetServoPos(RSHOULDER) > 400){
+            stuck+=1;
+            if(stuck > 5){
+                release();
+            }
+        } else {
+            stuck = 0;
         }
         // 检测到敌人
         if (distance > 100 || enemy_FRONT == 0){
