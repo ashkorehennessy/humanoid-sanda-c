@@ -1,8 +1,6 @@
 #include  "Apps/SystemTask.h"
 uint8 SERVO_MAPPING[10] = {1,2,3,4,5,6,7,8,9,10};
 uint8 auto_pilot_index = 0;
-#define FORWARD 0,0,0,0
-#define STOP 1,1,1,1
 enum servoID{RWHEEL = 1, LWHEEL, LFOOT, LSHOULDER, LELBOW, LHAND, RFOOT, RSHOULDER, RELBOW, RHAND};
 //机器人动作初始化
 void init(){
@@ -205,7 +203,11 @@ void front_stand(){
     front_4();
     DelayMS(1400);
     front_5();
-    DelayMS(1000);
+    DelayMS(700);
+    MFSetServoPos(LSHOULDER,170,812);
+    MFSetServoPos(RSHOULDER,280,812);
+    MFServoAction();
+    DelayMS(400);
 }
 
 // 后倒站起
@@ -221,7 +223,11 @@ void back_stand(){
     back_4();
     DelayMS(1400);
     back_5();
-    DelayMS(1000);
+    DelayMS(700);
+    MFSetServoPos(LSHOULDER,170,812);
+    MFSetServoPos(RSHOULDER,280,812);
+    MFServoAction();
+    DelayMS(400);
 }
 
 // 左手攻击，需要提前保持预警状态
@@ -348,7 +354,6 @@ void hit_3_R(){
 }
 
 void hit_4(){
-	
     MFSetServoPos(LFOOT,492,650);
     MFSetServoPos(RFOOT,492,650);
 	MFSetServoPos(LELBOW,380,512);
@@ -420,12 +425,33 @@ void szyf(){
     MFServoAction();
 }
 
-void attack_back(){
+void attacking_back(){
     alert_delay();
-    MFSetServoRotaSpd(RWHEEL, 400);
-    MFSetServoRotaSpd(LWHEEL, -420);
+    MFSetServoRotaSpd(RWHEEL,400);
+    MFSetServoRotaSpd(LWHEEL,-420);
     MFServoAction();
-    DelayMS(500);  //后退1000ms
+    DelayMS(500);
+    forward();
+}
+
+void attacking_back_left(){
+    alert_delay();
+    MFSetServoPos(LFOOT,492,650);
+    MFSetServoPos(RFOOT,492,650);
+    MFSetServoRotaSpd(RWHEEL,500);
+    MFSetServoRotaSpd(LWHEEL,-420);
+    MFServoAction();
+    DelayMS(700);
+    forward();
+}
+void attacking_back_right(){
+    alert_delay();
+    MFSetServoPos(LFOOT,492,650);
+    MFSetServoPos(RFOOT,492,650);
+    MFSetServoRotaSpd(RWHEEL,400);
+    MFSetServoRotaSpd(LWHEEL,-520);
+    MFServoAction();
+    DelayMS(700);
     forward();
 }
 //自动巡航
@@ -588,7 +614,7 @@ int main()
         if (distance > 100 || enemy_FRONT == 0){
             hit_2();
             if (attack_times % 3 == 0) {
-                attack_back();
+                attacking_back();
             }
             attack_times++;
             autopilot();
@@ -610,7 +636,7 @@ int main()
             hit_left();
             attack_times++;
             if (attack_times % 3 == 0) {
-                attack_back();
+                attacking_back_right();
             }
             autopilot();
             continue;
@@ -620,7 +646,7 @@ int main()
             hit_right();
             attack_times++;
             if (attack_times % 3 == 0) {
-                attack_back();
+                attacking_back_left();
             }
             autopilot();
             continue;
@@ -630,7 +656,7 @@ int main()
             hit_3_L();
             attack_times++;
             if (attack_times % 3 == 0) {
-                attack_back();
+                attacking_back();
             }
             autopilot();
             continue;
@@ -640,7 +666,7 @@ int main()
             hit_3_R();
             attack_times++;
             if (attack_times % 3 == 0) {
-                attack_back();
+                attacking_back();
             }
             autopilot();
             continue;
