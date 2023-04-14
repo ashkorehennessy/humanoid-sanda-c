@@ -544,7 +544,7 @@ int main()
 
     for(;;){
         if(is_init == 1){
-            if(MFGetAD(0) < 1000 && MFGetAD(0 > 400)){
+            if(MFGetAD(0) < 1000 && MFGetAD(0) > 400){
                 alert_delay();
                 is_init = 0;
             }
