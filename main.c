@@ -151,6 +151,7 @@ void back_4(){
 
 //前倒，重新站起动作5，手部往外一点，肩部往下一点，腿部后弯
 void front_5(){
+    go_back();
     MFSetServoPos(LELBOW,550,300);
     MFSetServoPos(RELBOW,512,300);
     MFSetServoPos(LHAND,520,300);
@@ -173,6 +174,7 @@ void front_5(){
 
 //后倒，重新站起动作5，腿部伸直，肩部伸直，移动轮子平衡重心
 void back_5(){
+    forward();
     MFSetServoPos(LELBOW,550,300);
     MFSetServoPos(RELBOW,512,300);
     MFSetServoPos(LHAND,520,300);
@@ -249,6 +251,7 @@ void hit_left(){
     DelayMS(800);
     MFSetServoPos(LELBOW,680,612);
     MFSetServoPos(LHAND,630,612);
+    stop();
     MFServoAction();
 }
 
@@ -264,6 +267,7 @@ void hit_right(){
     DelayMS(800);
     MFSetServoPos(RELBOW,740,612);
     MFSetServoPos(RHAND,780,612);
+    stop();
     MFServoAction();
 }
 // 打击动作1，手抬起
@@ -306,7 +310,7 @@ void hit_3_L(){
     MFSetServoRotaSpd(RWHEEL,-580);
     MFSetServoRotaSpd(LWHEEL,-605);
     MFServoAction();
-    DelayMS(300);
+    DelayMS(200);
     MFSetServoPos(LSHOULDER,240,812);
     MFSetServoPos(RSHOULDER,260,812);
     MFSetServoPos(LELBOW,680,812);
@@ -318,16 +322,14 @@ void hit_3_L(){
     MFSetServoRotaSpd(RWHEEL,480);
     MFSetServoRotaSpd(LWHEEL,505);
     MFServoAction();
-    DelayMS(300);
+    DelayMS(200);
     MFSetServoPos(LELBOW,420,812);
     MFSetServoPos(LHAND,370,812);
     MFSetServoPos(RELBOW,380,812);
     MFSetServoPos(RHAND,420,812);
     MFServoAction();
     DelayMS(600);
-    MFSetServoPos(LFOOT,502,512);
-    MFSetServoPos(RFOOT,502,512);
-    MFServoAction();
+    stop();
 }
 //打击动作3，雨刮式攻击
 void hit_3_R(){
@@ -336,7 +338,7 @@ void hit_3_R(){
     MFSetServoRotaSpd(RWHEEL,580);
     MFSetServoRotaSpd(LWHEEL,605);
     MFServoAction();
-    DelayMS(300);
+    DelayMS(200);
     MFSetServoPos(LSHOULDER,240,812);
     MFSetServoPos(RSHOULDER,260,812);
     MFSetServoPos(LELBOW,420,812);
@@ -348,16 +350,13 @@ void hit_3_R(){
     MFSetServoRotaSpd(RWHEEL,-500);
     MFSetServoRotaSpd(LWHEEL,-535);
     MFServoAction();
-    DelayMS(300);
+    DelayMS(200);
     MFSetServoPos(LELBOW,680,812);
     MFSetServoPos(LHAND,630,812);
     MFSetServoPos(RELBOW,640,812);
     MFSetServoPos(RHAND,680,812);
     MFServoAction();
-    DelayMS(600);
-    MFSetServoPos(LFOOT,502,512);
-    MFSetServoPos(RFOOT,502,512);
-    MFServoAction();
+    stop();
 }
 
 void hit_4(){
@@ -446,34 +445,14 @@ void szyf(){
 }
 
 void attacking_back(){
-    alert_delay();
     MFSetServoRotaSpd(RWHEEL,400);
     MFSetServoRotaSpd(LWHEEL,-420);
     MFServoAction();
-    DelayMS(500);
-    forward();
+    alert_delay();
+    DelayMS(400);
+    stop();
 }
 
-void attacking_back_left(){
-    alert_delay();
-    MFSetServoPos(LFOOT,472,650);
-    MFSetServoPos(RFOOT,472,650);
-    MFSetServoRotaSpd(RWHEEL,500);
-    MFSetServoRotaSpd(LWHEEL,-420);
-    MFServoAction();
-    DelayMS(700);
-    forward();
-}
-void attacking_back_right(){
-    alert_delay();
-    MFSetServoPos(LFOOT,472,650);
-    MFSetServoPos(RFOOT,472,650);
-    MFSetServoRotaSpd(RWHEEL,400);
-    MFSetServoRotaSpd(LWHEEL,-520);
-    MFServoAction();
-    DelayMS(700);
-    forward();
-}
 //自动巡航
 void autopilot() {
     MFSetServoPos(LFOOT, 502, 256);
@@ -630,10 +609,15 @@ int main()
             MFServoAction();
             continue;
         }
+
+        if (MFGetDigiInput(1)==1 || MFGetDigiInput(3)==1){
+            autopilot();
+            continue;
+        }
         //卡死检测
         if (MFGetServoPos(LSHOULDER) > 400 || MFGetServoPos(RSHOULDER) > 400){
             stuck+=1;
-            if(stuck > 5){
+            if(stuck > 2){
                 release();
             }
         } else {
@@ -665,7 +649,7 @@ int main()
             hit_left();
             attack_times++;
             if (attack_times % 3 == 0) {
-                attacking_back_right();
+                attacking_back();
             }
             autopilot();
             continue;
@@ -675,7 +659,7 @@ int main()
             hit_right();
             attack_times++;
             if (attack_times % 3 == 0) {
-                attacking_back_left();
+                attacking_back();
             }
             autopilot();
             continue;
@@ -687,6 +671,9 @@ int main()
             if (attack_times % 3 == 0) {
                 attacking_back();
             }
+            MFSetServoPos(LFOOT,502,512);
+            MFSetServoPos(RFOOT,502,512);
+            MFServoAction();
             autopilot();
             continue;
         }
@@ -697,6 +684,9 @@ int main()
             if (attack_times % 3 == 0) {
                 attacking_back();
             }
+            MFSetServoPos(LFOOT,502,512);
+            MFSetServoPos(RFOOT,502,512);
+            MFServoAction();
             autopilot();
             continue;
         }
