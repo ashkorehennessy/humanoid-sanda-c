@@ -76,6 +76,8 @@ void stop(){
 void front_0(){
     MFSetServoPos(LSHOULDER,70,780);
     MFSetServoPos(RSHOULDER,140,780);
+    MFSetServoPos(LHAND,270,512);
+    MFSetServoPos(RHAND,780,512);
     MFServoAction();
 }
 
@@ -192,8 +194,12 @@ void back_5(){
 
 //前倒站起
 void front_stand(){
-    DelayMS(300);
-    front_0();
+    //MFSetServoPos(LHAND,270,256);
+    //MFSetServoPos(RHAND,780,256);
+    if(MFGetServoPos(LHAND) < 340 && MFGetServoPos(RHAND) > 710){
+        DelayMS(300);
+        front_0();
+    }
     DelayMS(700);
     front_1();
     DelayMS(600);
