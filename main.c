@@ -1,14 +1,15 @@
 #include  "Apps/SystemTask.h"
 uint8 SERVO_MAPPING[10] = {1,2,3,4,5,6,7,8,9,10};
 uint8 auto_pilot_index = 0;
-uint8 stuck = 0;
+#define FORWARD 0,0,0,0
+#define STOP 1,1,1,1
 enum servoID{RWHEEL = 1, LWHEEL, LFOOT, LSHOULDER, LELBOW, LHAND, RFOOT, RSHOULDER, RELBOW, RHAND};
 //机器人动作初始化
 void init(){
-    MFSetServoPos(LFOOT,512,512);
+    MFSetServoPos(LFOOT,468,512);
     MFSetServoPos(LELBOW,550,512);
     MFSetServoPos(LHAND,550,512);
-    MFSetServoPos(RFOOT,512,512);
+    MFSetServoPos(RFOOT,468,512);
     MFSetServoPos(RELBOW,512,512);
     MFSetServoPos(RHAND,512,512);
     MFServoAction();
@@ -76,8 +77,6 @@ void stop(){
 void front_0(){
     MFSetServoPos(LSHOULDER,70,780);
     MFSetServoPos(RSHOULDER,140,780);
-    MFSetServoPos(LHAND,270,512);
-    MFSetServoPos(RHAND,780,512);
     MFServoAction();
 }
 
@@ -133,8 +132,8 @@ void front_4(){
     MFSetServoPos(LHAND,342,768);
     MFSetServoPos(RELBOW,346,768);
     MFSetServoPos(RHAND,710,768);
-    MFSetServoPos(LFOOT,803,512);
-    MFSetServoPos(RFOOT,810,512);
+    MFSetServoPos(LFOOT,853,512);
+    MFSetServoPos(RFOOT,860,512);
     MFServoAction();
 }
 
@@ -151,15 +150,19 @@ void back_4(){
 
 //前倒，重新站起动作5，手部往外一点，肩部往下一点，腿部后弯
 void front_5(){
-    go_back();
+    boost();
+    boost();
+    boost();
+    stop();
+    DelayMS(500);
     MFSetServoPos(LELBOW,550,300);
     MFSetServoPos(RELBOW,512,300);
     MFSetServoPos(LHAND,520,300);
     MFSetServoPos(RHAND,512,300);
     MFSetServoPos(LSHOULDER,512,768);
     MFSetServoPos(RSHOULDER,512,768);
-    MFSetServoPos(LFOOT,512,300);
-    MFSetServoPos(RFOOT,512,300);
+    MFSetServoPos(LFOOT,468,300);
+    MFSetServoPos(RFOOT,468,300);
     MFSetServoRotaSpd(RWHEEL,-700);
     MFSetServoRotaSpd(LWHEEL,740);
     MFServoAction();
@@ -174,15 +177,18 @@ void front_5(){
 
 //后倒，重新站起动作5，腿部伸直，肩部伸直，移动轮子平衡重心
 void back_5(){
-    forward();
+    go_back();
+    go_back();
+    stop();
+    DelayMS(500);
     MFSetServoPos(LELBOW,550,300);
     MFSetServoPos(RELBOW,512,300);
     MFSetServoPos(LHAND,520,300);
     MFSetServoPos(RHAND,512,300);
     MFSetServoPos(LSHOULDER,512,768);
     MFSetServoPos(RSHOULDER,512,768);
-    MFSetServoPos(LFOOT,512,300);
-    MFSetServoPos(RFOOT,512,300);
+    MFSetServoPos(LFOOT,468,300);
+    MFSetServoPos(RFOOT,468,300);
     MFSetServoRotaSpd(RWHEEL,740);
     MFSetServoRotaSpd(LWHEEL,-700);
     MFServoAction();
@@ -196,12 +202,8 @@ void back_5(){
 
 //前倒站起
 void front_stand(){
-    //MFSetServoPos(LHAND,270,256);
-    //MFSetServoPos(RHAND,780,256);
-    if(MFGetServoPos(LHAND) < 340 && MFGetServoPos(RHAND) > 710){
-        DelayMS(300);
-        front_0();
-    }
+    DelayMS(300);
+    front_0();
     DelayMS(700);
     front_1();
     DelayMS(600);
@@ -210,13 +212,9 @@ void front_stand(){
     front_3();
     DelayMS(1000);
     front_4();
-    DelayMS(1400);
+    DelayMS(900);
     front_5();
-    DelayMS(700);
-    MFSetServoPos(LSHOULDER,170,812);
-    MFSetServoPos(RSHOULDER,280,812);
-    MFServoAction();
-    DelayMS(400);
+    DelayMS(1000);
 }
 
 // 后倒站起
@@ -230,19 +228,15 @@ void back_stand(){
     back_3();
     DelayMS(1000);
     back_4();
-    DelayMS(1400);
+    DelayMS(900);
     back_5();
-    DelayMS(700);
-    MFSetServoPos(LSHOULDER,170,812);
-    MFSetServoPos(RSHOULDER,280,812);
-    MFServoAction();
-    DelayMS(400);
+    DelayMS(1000);
 }
 
 // 左手攻击，需要提前保持预警状态
 void hit_left(){
-    MFSetServoPos(LFOOT,492,650);
-    MFSetServoPos(RFOOT,492,650);
+    MFSetServoPos(LFOOT,462,650);
+    MFSetServoPos(RFOOT,462,650);
     MFSetServoPos(LELBOW,630,968);
     MFSetServoPos(LHAND,580,968);
     MFSetServoRotaSpd(RWHEEL,-580);
@@ -251,14 +245,13 @@ void hit_left(){
     DelayMS(800);
     MFSetServoPos(LELBOW,680,612);
     MFSetServoPos(LHAND,630,612);
-    stop();
     MFServoAction();
 }
 
 // 右手攻击，需要提前保持预警状态
 void hit_right(){
-    MFSetServoPos(LFOOT,492,650);
-    MFSetServoPos(RFOOT,492,650);
+    MFSetServoPos(LFOOT,462,650);
+    MFSetServoPos(RFOOT,462,650);
     MFSetServoPos(RELBOW,430,968);
     MFSetServoPos(RHAND,470,968);
     MFSetServoRotaSpd(RWHEEL,580);
@@ -267,7 +260,6 @@ void hit_right(){
     DelayMS(800);
     MFSetServoPos(RELBOW,740,612);
     MFSetServoPos(RHAND,780,612);
-    stop();
     MFServoAction();
 }
 // 打击动作1，手抬起
@@ -283,8 +275,8 @@ void hit_1(){
 
 //打击动作2，前方散开攻击
 void hit_2(){
-    MFSetServoPos(LFOOT,492,650);
-    MFSetServoPos(RFOOT,492,650);
+    MFSetServoPos(LFOOT,462,650);
+    MFSetServoPos(RFOOT,462,650);
     MFSetServoPos(LELBOW,630,968);
     MFSetServoPos(LHAND,580,968);
     MFSetServoPos(RELBOW,430,968);
@@ -297,20 +289,20 @@ void hit_2(){
     MFSetServoPos(LHAND,270,968);
     MFSetServoPos(RELBOW,740,968);
     MFSetServoPos(RHAND,780,968);
-    MFSetServoPos(LFOOT,502,512);
-    MFSetServoPos(RFOOT,502,512);
+    MFSetServoPos(LFOOT,462,512);
+    MFSetServoPos(RFOOT,462,512);
     MFSetServoRotaSpd(LWHEEL,0);
     MFSetServoRotaSpd(RWHEEL,0);
     MFServoAction();
 
 }
 void hit_3_L(){
-    MFSetServoPos(LFOOT,492,650);
-    MFSetServoPos(RFOOT,492,650);
+    MFSetServoPos(LFOOT,462,650);
+    MFSetServoPos(RFOOT,462,650);
     MFSetServoRotaSpd(RWHEEL,-580);
     MFSetServoRotaSpd(LWHEEL,-605);
     MFServoAction();
-    DelayMS(200);
+    DelayMS(300);
     MFSetServoPos(LSHOULDER,240,812);
     MFSetServoPos(RSHOULDER,260,812);
     MFSetServoPos(LELBOW,680,812);
@@ -322,23 +314,25 @@ void hit_3_L(){
     MFSetServoRotaSpd(RWHEEL,480);
     MFSetServoRotaSpd(LWHEEL,505);
     MFServoAction();
-    DelayMS(200);
+    DelayMS(300);
     MFSetServoPos(LELBOW,420,812);
     MFSetServoPos(LHAND,370,812);
     MFSetServoPos(RELBOW,380,812);
     MFSetServoPos(RHAND,420,812);
     MFServoAction();
     DelayMS(600);
-    stop();
+    MFSetServoPos(LFOOT,462,512);
+    MFSetServoPos(RFOOT,462,512);
+    MFServoAction();
 }
 //打击动作3，雨刮式攻击
 void hit_3_R(){
-    MFSetServoPos(LFOOT,492,650);
-    MFSetServoPos(RFOOT,492,650);
+    MFSetServoPos(LFOOT,462,650);
+    MFSetServoPos(RFOOT,462,650);
     MFSetServoRotaSpd(RWHEEL,580);
     MFSetServoRotaSpd(LWHEEL,605);
     MFServoAction();
-    DelayMS(200);
+    DelayMS(300);
     MFSetServoPos(LSHOULDER,240,812);
     MFSetServoPos(RSHOULDER,260,812);
     MFSetServoPos(LELBOW,420,812);
@@ -350,18 +344,22 @@ void hit_3_R(){
     MFSetServoRotaSpd(RWHEEL,-500);
     MFSetServoRotaSpd(LWHEEL,-535);
     MFServoAction();
-    DelayMS(200);
+    DelayMS(300);
     MFSetServoPos(LELBOW,680,812);
     MFSetServoPos(LHAND,630,812);
     MFSetServoPos(RELBOW,640,812);
     MFSetServoPos(RHAND,680,812);
     MFServoAction();
-    stop();
+    DelayMS(600);
+    MFSetServoPos(LFOOT,462,512);
+    MFSetServoPos(RFOOT,462,512);
+    MFServoAction();
 }
 
 void hit_4(){
-    MFSetServoPos(LFOOT,492,650);
-    MFSetServoPos(RFOOT,492,650);
+	
+    MFSetServoPos(LFOOT,462,650);
+    MFSetServoPos(RFOOT,462,650);
 	MFSetServoPos(LELBOW,380,512);
     MFSetServoPos(LHAND,330,512);
     MFSetServoPos(RELBOW,340,512);
@@ -374,8 +372,8 @@ void hit_4(){
     MFSetServoRotaSpd(LWHEEL,-515);
     MFServoAction();
     DelayMS(1800);
-    MFSetServoPos(LFOOT,502,512);
-    MFSetServoPos(RFOOT,502,512);
+    MFSetServoPos(LFOOT,462,512);
+    MFSetServoPos(RFOOT,462,512);
     MFServoAction();
 }
 
@@ -402,19 +400,6 @@ void alert_delay(){
     MFSetServoPos(RHAND,780,256);
     MFServoAction();
 }
-
-//手部放松
-void release(){
-    MFSetServoPos(LSHOULDER,512,256);
-    MFSetServoPos(RSHOULDER,512,256);
-    MFSetServoPos(LELBOW,550,512);
-    MFSetServoPos(LHAND,550,512);
-    MFSetServoPos(RELBOW,512,512);
-    MFSetServoPos(RHAND,512,512);
-    MFServoAction();
-}
-
-//设置初始化
 void reinit(){
     MFInit();
     MFInitServoMapping(&SERVO_MAPPING[0],10);
@@ -444,19 +429,18 @@ void szyf(){
     MFServoAction();
 }
 
-void attacking_back(){
-    MFSetServoRotaSpd(RWHEEL,400);
-    MFSetServoRotaSpd(LWHEEL,-420);
+void attack_back(){
+    MFSetServoRotaSpd(RWHEEL, 400);
+    MFSetServoRotaSpd(LWHEEL, -420);
     MFServoAction();
     alert_delay();
-    DelayMS(400);
+    DelayMS(400);  //后退1000ms
     stop();
 }
-
 //自动巡航
 void autopilot() {
-    MFSetServoPos(LFOOT, 502, 256);
-    MFSetServoPos(RFOOT, 502, 256);
+    MFSetServoPos(LFOOT, 468, 256);
+    MFSetServoPos(RFOOT, 468, 256);
     MFServoAction();
     auto_pilot_index = 0;
     if(MFGetDigiInput(0) == 1) {
@@ -569,7 +553,7 @@ int main()
 
     for(;;){
         if(is_init == 1){
-            if(MFGetAD(0) < 1000 && MFGetAD(0) > 400){
+            if(MFGetAD(0) < 1000 && MFGetAD(0 > 400)){
                 alert_delay();
                 is_init = 0;
             }
@@ -591,43 +575,31 @@ int main()
         if (angle > 1000){
             stop();
             front_stand();
-            reinit();
-            autopilot();
-            MFSetServoPos(LFOOT, 502, 256);
-            MFSetServoPos(RFOOT, 502, 256);
+            MFSetServoPos(LFOOT, 468, 256);
+            MFSetServoPos(RFOOT, 468, 256);
             MFServoAction();
+            DelayMS(200);
+            alert_delay();
+            autopilot();
             continue;
         }
         // 后倒站起
         if (angle < 400){
             stop();
             back_stand();
-            reinit();
-            autopilot();
-            MFSetServoPos(LFOOT, 502, 256);
-            MFSetServoPos(RFOOT, 502, 256);
+            MFSetServoPos(LFOOT, 468, 256);
+            MFSetServoPos(RFOOT, 468, 256);
             MFServoAction();
-            continue;
-        }
-
-        if (MFGetDigiInput(1)==1 || MFGetDigiInput(3)==1){
+            DelayMS(200);
+            alert_delay();
             autopilot();
             continue;
-        }
-        //卡死检测
-        if (MFGetServoPos(LSHOULDER) > 400 || MFGetServoPos(RSHOULDER) > 400){
-            stuck+=1;
-            if(stuck > 2){
-                release();
-            }
-        } else {
-            stuck = 0;
         }
         // 检测到敌人
         if (distance > 100 || enemy_FRONT == 0){
             hit_2();
             if (attack_times % 3 == 0) {
-                attacking_back();
+                attack_back();
             }
             attack_times++;
             autopilot();
@@ -647,20 +619,14 @@ int main()
         // 左侧检测到敌人
         if (enemy_L2 == 0){
             hit_left();
-            attack_times++;
-            if (attack_times % 3 == 0) {
-                attacking_back();
-            }
+            stop();
             autopilot();
             continue;
         }
         // 右侧检测到敌人
         if (enemy_R2 == 0){
             hit_right();
-            attack_times++;
-            if (attack_times % 3 == 0) {
-                attacking_back();
-            }
+            stop();
             autopilot();
             continue;
         }
@@ -668,12 +634,7 @@ int main()
         if (enemy_L1 == 0) {
             hit_3_L();
             attack_times++;
-            if (attack_times % 3 == 0) {
-                attacking_back();
-            }
-            MFSetServoPos(LFOOT,502,512);
-            MFSetServoPos(RFOOT,502,512);
-            MFServoAction();
+            stop();
             autopilot();
             continue;
         }
@@ -681,12 +642,7 @@ int main()
         if (enemy_R1 == 0) {
             hit_3_R();
             attack_times++;
-            if (attack_times % 3 == 0) {
-                attacking_back();
-            }
-            MFSetServoPos(LFOOT,502,512);
-            MFSetServoPos(RFOOT,502,512);
-            MFServoAction();
+            stop();
             autopilot();
             continue;
         }
